@@ -149,44 +149,7 @@ EMAIL_HOST_PASSWORD = 'your-app-password'
 ### Database
 For production, configure PostgreSQL or MySQL in `settings.py`.
 
-## 🚀 Deployment
 
-### Deploy to PythonAnywhere (Free)
-
-1. Create account at [PythonAnywhere](https://www.pythonanywhere.com)
-2. Upload your code
-3. Set up virtual environment
-4. Configure WSGI file
-5. Set static files path
-6. Reload web app
-
-### Deploy to Heroku
-
-1. Install Heroku CLI
-2. Create `Procfile`:
-```
-web: gunicorn srms_project.wsgi
-```
-3. Add `gunicorn` to requirements.txt
-4. Deploy:
-```bash
-heroku create your-app-name
-git push heroku main
-heroku run python manage.py migrate
-```
-
-### Deploy to Render
-
-1. Create account at [Render](https://render.com)
-2. Connect GitHub repository
-3. Configure build command:
-```bash
-pip install -r requirements.txt && python manage.py migrate
-```
-4. Set start command:
-```bash
-gunicorn srms_project.wsgi:application
-```
 
 ## 📄 License
 
