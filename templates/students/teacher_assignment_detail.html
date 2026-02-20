@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Assignment Details - Teacher{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link" href="{% url 'teacher_view_assignments' %}"><i class="fas fa-tasks"></i> My Assignments</a>
+            </nav>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2><i class="fas fa-tasks"></i> {{ assignment.title }}</h2>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>Assignment Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Description:</strong> {{ assignment.description }}</p>
+                    <p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+                    <p><strong>Class:</strong> {{ assignment.class_assigned.name }}</p>
+                    <p><strong>Max Marks:</strong> {{ assignment.max_marks }}</p>
+                    <p><strong>Due Date:</strong> {{ assignment.due_date|date:"d M Y, h:i A" }}</p>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3>{{ total_students }}</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-info">{{ submitted_count }}</h3>
+                            <p>Submitted</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-success">{{ graded_count }}</h3>
+                            <p>Graded</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-warning">{{ pending_count }}</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Submissions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Roll No</th>
+                                    <th>Submitted At</th>
+                                    <th>Status</th>
+                                    <th>Marks</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for submission in submissions %}
+                                <tr>
+                                    <td>{{ submission.student.user.get_full_name }}</td>
+                                    <td>{{ submission.student.roll_number }}</td>
+                                    <td>{{ submission.submitted_at|date:"d M Y, h:i A" }}</td>
+                                    <td>
+                                        {% if submission.status == 'graded' %}
+                                        <span class="badge bg-success">Graded</span>
+                                        {% elif submission.status == 'late' %}
+                                        <span class="badge bg-warning">Late</span>
+                                        {% else %}
+                                        <span class="badge bg-info">Submitted</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ submission.marks_obtained|default:"-" }}/{{ assignment.max_marks }}</td>
+                                    <td>
+                                        <a href="{% url 'teacher_grade_submission' submission.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i> Grade
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No submissions yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

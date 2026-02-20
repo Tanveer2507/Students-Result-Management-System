@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Submit Assignment - Student{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">STUDENT PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'student_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link" href="{% url 'student_view_assignments' %}"><i class="fas fa-tasks"></i> Assignments</a>
+            </nav>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2><i class="fas fa-upload"></i> Submit Assignment</h2>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5>{{ assignment.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+                    <p><strong>Max Marks:</strong> {{ assignment.max_marks }}</p>
+                    <p><strong>Due Date:</strong> {{ assignment.due_date|date:"d M Y, h:i A" }}</p>
+                    
+                    {% if assignment.due_date < now %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> This assignment is past its due date. Your submission will be marked as late.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>Submit Your Work</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="submission_file" class="form-label">Upload File</label>
+                            <input type="file" class="form-control" id="submission_file" name="submission_file">
+                            <small class="text-muted">Upload your assignment file (PDF, DOC, DOCX, etc.)</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="submission_text" class="form-label">Or Write Your Answer</label>
+                            <textarea class="form-control" id="submission_text" name="submission_text" rows="6" 
+                                      placeholder="Type your answer here..."></textarea>
+                            <small class="text-muted">You can provide text answer if you don't have a file</small>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> You must provide either a file or text submission (or both).
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-upload"></i> Submit Assignment
+                        </button>
+                        <a href="{% url 'student_assignment_detail' assignment.id %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

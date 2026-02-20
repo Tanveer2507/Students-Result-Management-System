@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Recalculate Result{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+                <a class="nav-link active" href="{% url 'admin_manage_results' %}">
+                    <i class="fas fa-certificate"></i> Manage Results
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-calculator"></i> Recalculate Result</h2>
+                <a href="{% url 'admin_result_detail' result.id %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Details
+                </a>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Student: {{ result.student.user.get_full_name }}</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Roll Number:</strong> {{ result.student.roll_number }}</p>
+                    <p><strong>Class:</strong> {{ result.student.student_class }}</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Current Marks</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Max Marks</th>
+                                    <th>Marks Obtained</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mark in marks %}
+                                <tr>
+                                    <td>{{ mark.subject.name }}</td>
+                                    <td>{{ mark.subject.max_marks }}</td>
+                                    <td>{{ mark.marks_obtained }}</td>
+                                    <td>
+                                        {% if mark.marks_obtained >= mark.subject.pass_marks %}
+                                        <span class="badge bg-success">Pass</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Fail</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-sync"></i> Recalculate Result</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Click the button below to recalculate the result based on current marks. This will update:
+                        <ul class="mb-0">
+                            <li>Total Marks</li>
+                            <li>Percentage</li>
+                            <li>Grade</li>
+                            <li>Status (Pass/Fail)</li>
+                        </ul>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'admin_result_detail' result.id %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-calculator"></i> Recalculate Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,415 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">STUDENT PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="{% url 'student_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'student_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'student_marks_detail' %}">
+                    <i class="fas fa-chart-line"></i> My Marks
+                </a>
+                <a class="nav-link" href="{% url 'student_result_detail' %}">
+                    <i class="fas fa-certificate"></i> My Result
+                </a>
+                <a class="nav-link" href="{% url 'student_id_card' %}">
+                    <i class="fas fa-id-card"></i> ID Card
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4">Student Dashboard</h2>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #4e73df;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Subjects</h6>
+                                    <h3>{{ total_subjects }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-book fa-2x text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #1cc88a;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Passed</h6>
+                                    <h3>{{ passed_subjects }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-check-circle fa-2x text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #e74a3b;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Failed</h6>
+                                    <h3>{{ failed_subjects }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-times-circle fa-2x text-danger"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #f6c23e;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Percentage</h6>
+                                    <h3>{% if result %}{{ result.percentage }}%{% else %}N/A{% endif %}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-percentage fa-2x text-warning"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements Section -->
+            {% if announcements %}
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="fas fa-bullhorn"></i> Important Announcements</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for announcement in announcements %}
+                            <div class="alert alert-{% if announcement.priority == 'urgent' %}danger{% elif announcement.priority == 'high' %}warning{% elif announcement.priority == 'medium' %}info{% else %}secondary{% endif %} mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="alert-heading mb-2">
+                                            {% if announcement.priority == 'urgent' %}
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            {% elif announcement.priority == 'high' %}
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {% else %}
+                                            <i class="fas fa-info-circle"></i>
+                                            {% endif %}
+                                            {{ announcement.title }}
+                                        </h6>
+                                        <p class="mb-1">{{ announcement.message }}</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock"></i> {{ announcement.created_at|date:"d M Y, h:i A" }}
+                                            {% if announcement.expires_at %}
+                                            | <i class="fas fa-hourglass-end"></i> Expires: {{ announcement.expires_at|date:"d M Y" }}
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-{% if announcement.priority == 'urgent' %}danger{% elif announcement.priority == 'high' %}warning{% elif announcement.priority == 'medium' %}info{% else %}secondary{% endif %}">
+                                        {{ announcement.get_priority_display }}
+                                    </span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Profile Overview -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-user"></i> Profile Information</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                {% if student.profile_picture %}
+                                <img src="{{ student.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #17a2b8;">
+                                {% else %}
+                                <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 2px solid #17a2b8;">
+                                    <i class="fas fa-user fa-2x text-white"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <p class="mb-1"><strong>Name:</strong> {{ student.user.get_full_name }}</p>
+                            <p class="mb-1"><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+                            <p class="mb-1"><strong>Class:</strong> {{ student.student_class }}</p>
+                            <p class="mb-1"><strong>Email:</strong> {{ student.user.email }}</p>
+                            <p class="mb-3"><strong>Phone:</strong> {{ student.phone }}</p>
+                            <a href="{% url 'student_profile' %}" class="btn btn-info btn-sm">
+                                <i class="fas fa-eye"></i> View Full Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Marks -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Subject-wise Marks</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Marks Obtained</th>
+                                            <th>Max Marks</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mark in marks %}
+                                        <tr>
+                                            <td>{{ mark.subject.name }}</td>
+                                            <td>{{ mark.marks_obtained }}</td>
+                                            <td>{{ mark.subject.max_marks }}</td>
+                                            <td>
+                                                {% if mark.marks_obtained >= mark.subject.pass_marks %}
+                                                <span class="badge bg-success">Pass</span>
+                                                {% else %}
+                                                <span class="badge bg-danger">Fail</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center">No marks available yet</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="{% url 'student_marks_detail' %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-chart-line"></i> View Detailed Analysis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Result Section -->
+            {% if result %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="result-card">
+                        <div class="card-header {% if result.status == 'Pass' %}bg-success{% else %}bg-danger{% endif %} text-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0"><i class="fas fa-certificate"></i> My Result</h5>
+                                <div>
+                                    <button onclick="printResult()" class="btn btn-light btn-sm me-2">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                    <button onclick="downloadResult()" class="btn btn-light btn-sm">
+                                        <i class="fas fa-download"></i> Download PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="printable-result">
+                            <!-- Result Header -->
+                            <div class="text-center mb-4 print-header">
+                                <h3 class="mb-1">Student Result Management System</h3>
+                                <h5 class="text-muted">Academic Result Card</h5>
+                                <hr>
+                            </div>
+
+                            <!-- Student Information -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td width="40%"><strong>Student Name:</strong></td>
+                                            <td>{{ student.user.get_full_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Roll Number:</strong></td>
+                                            <td>{{ student.roll_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Class:</strong></td>
+                                            <td>{{ student.student_class }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td width="40%"><strong>Father's Name:</strong></td>
+                                            <td>{{ student.father_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Date of Birth:</strong></td>
+                                            <td>{{ student.date_of_birth|date:"d M Y" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Session:</strong></td>
+                                            <td>2025-2026</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Marks Table -->
+                            <div class="table-responsive mb-4">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr class="text-center">
+                                            <th>S.No</th>
+                                            <th>Subject</th>
+                                            <th>Subject Code</th>
+                                            <th>Max Marks</th>
+                                            <th>Marks Obtained</th>
+                                            <th>Percentage</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mark in marks %}
+                                        <tr>
+                                            <td class="text-center">{{ forloop.counter }}</td>
+                                            <td>{{ mark.subject.name }}</td>
+                                            <td class="text-center">{{ mark.subject.code }}</td>
+                                            <td class="text-center">{{ mark.subject.max_marks }}</td>
+                                            <td class="text-center"><strong>{{ mark.marks_obtained }}</strong></td>
+                                            <td class="text-center">
+                                                {% widthratio mark.marks_obtained mark.subject.max_marks 100 as percentage %}
+                                                {{ percentage }}%
+                                            </td>
+                                            <td class="text-center">
+                                                {% if mark.marks_obtained >= mark.subject.pass_marks %}
+                                                <span class="badge bg-success">Pass</span>
+                                                {% else %}
+                                                <span class="badge bg-danger">Fail</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="7" class="text-center">No marks available</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                            <td class="text-center"><strong>{{ total_max_marks }}</strong></td>
+                                            <td class="text-center"><strong>{{ result.total_marks }}</strong></td>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <!-- Final Result Summary -->
+                            <div class="row text-center mb-4">
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3">
+                                        <h6 class="text-muted mb-2">Total Marks</h6>
+                                        <h3 class="text-primary mb-0">{{ result.total_marks }}/{{ total_max_marks }}</h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3">
+                                        <h6 class="text-muted mb-2">Percentage</h6>
+                                        <h3 class="text-info mb-0">{{ result.percentage }}%</h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3">
+                                        <h6 class="text-muted mb-2">Grade</h6>
+                                        <h3 class="text-warning mb-0">{{ result.grade }}</h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3">
+                                        <h6 class="text-muted mb-2">Result Status</h6>
+                                        <h3 class="{% if result.status == 'Pass' %}text-success{% else %}text-danger{% endif %} mb-0">
+                                            {{ result.status }}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grade Scale -->
+                            <div class="alert alert-light border">
+                                <h6 class="mb-2"><i class="fas fa-info-circle"></i> Grade Scale:</h6>
+                                <div class="row small">
+                                    <div class="col-md-2">A+ (90-100%)</div>
+                                    <div class="col-md-2">A (75-89%)</div>
+                                    <div class="col-md-2">B (60-74%)</div>
+                                    <div class="col-md-2">C (50-59%)</div>
+                                    <div class="col-md-2">D (35-49%)</div>
+                                    <div class="col-md-2">F (Below 35%)</div>
+                                </div>
+                            </div>
+
+                            <!-- Footer for Print -->
+                            <div class="text-center mt-4 print-footer">
+                                <p class="text-muted mb-1">This is a computer-generated result card</p>
+                                <p class="text-muted small">Generated on: {{ result.updated_at|date:"d M Y, h:i A" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Your result has not been published yet. Please check back later.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+// Set data attributes for PDF generation
+document.addEventListener('DOMContentLoaded', function() {
+    const printableResult = document.getElementById('printable-result');
+    if (printableResult) {
+        printableResult.setAttribute('data-student-name', '{{ student.user.get_full_name|escapejs }}');
+        printableResult.setAttribute('data-roll-number', '{{ student.roll_number|escapejs }}');
+    }
+});
+</script>
+{% endblock %}

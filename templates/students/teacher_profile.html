@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% block title %}Teacher Profile{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'teacher_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link" href="{% url 'teacher_enter_marks' %}">
+                    <i class="fas fa-edit"></i> Enter Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_marks' %}">
+                    <i class="fas fa-list"></i> View Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_id_card' %}">
+                    <i class="fas fa-id-card"></i> ID Card
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>My Profile</h2>
+                <a href="{% url 'teacher_edit_profile' %}" class="btn btn-success">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_edit_profile' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-edit fa-2x mb-2"></i><br>
+                                        Edit Profile
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_students_list' %}" class="btn btn-outline-success w-100 py-3">
+                                        <i class="fas fa-users fa-2x mb-2"></i><br>
+                                        View Students
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_enter_marks' %}" class="btn btn-outline-info w-100 py-3">
+                                        <i class="fas fa-edit fa-2x mb-2"></i><br>
+                                        Enter Marks
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_id_card' %}" class="btn btn-outline-secondary w-100 py-3">
+                                        <i class="fas fa-id-card fa-2x mb-2"></i><br>
+                                        View ID Card
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'change_password' %}" class="btn btn-outline-warning w-100 py-3">
+                                        <i class="fas fa-key fa-2x mb-2"></i><br>
+                                        Change Password
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Profile Picture & Basic Info -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                {% if teacher.profile_picture %}
+                                <img src="{{ teacher.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #1cc88a;">
+                                {% else %}
+                                <div style="width: 150px; height: 150px; background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 64px;">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <h4>{{ teacher.user.get_full_name }}</h4>
+                            <p class="text-muted">{{ teacher.employee_id }}</p>
+                            <p class="badge bg-success">{{ teacher.qualification }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Information -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-user"></i> First Name:</strong></p>
+                                    <p class="text-muted">{{ teacher.user.first_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-user"></i> Last Name:</strong></p>
+                                    <p class="text-muted">{{ teacher.user.last_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-id-badge"></i> Employee ID:</strong></p>
+                                    <p class="text-muted">{{ teacher.employee_id }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-envelope"></i> Email:</strong></p>
+                                    <p class="text-muted">{{ teacher.user.email }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-phone"></i> Phone:</strong></p>
+                                    <p class="text-muted">{{ teacher.phone }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-graduation-cap"></i> Qualification:</strong></p>
+                                    <p class="text-muted">{{ teacher.qualification }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-book"></i> Specialization:</strong></p>
+                                    <p class="text-muted">{{ teacher.specialization|default:"Not specified" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-briefcase"></i> Experience:</strong></p>
+                                    <p class="text-muted">{{ teacher.experience }} years</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><strong><i class="fas fa-map-marker-alt"></i> Address:</strong></p>
+                                    <p class="text-muted">{{ teacher.address|default:"Not specified" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-book"></i> Assigned Subjects</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if subjects %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Subject Name</th>
+                                            <th>Code</th>
+                                            <th>Class</th>
+                                            <th>Max Marks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for subject in subjects %}
+                                        <tr>
+                                            <td>{{ subject.name }}</td>
+                                            <td>{{ subject.code }}</td>
+                                            <td>{{ subject.class_assigned }}</td>
+                                            <td>{{ subject.max_marks }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No subjects assigned yet. Please contact admin.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

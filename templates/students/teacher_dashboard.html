@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'teacher_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link" href="{% url 'teacher_enter_marks' %}">
+                    <i class="fas fa-edit"></i> Enter Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_marks' %}">
+                    <i class="fas fa-list"></i> View Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_students_history' %}">
+                    <i class="fas fa-history"></i> Students History
+                </a>
+                <a class="nav-link" href="{% url 'teacher_id_card' %}">
+                    <i class="fas fa-id-card"></i> ID Card
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4">Teacher Dashboard</h2>
+
+            <!-- Teacher ID Card -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card teacher-id-card">
+                        <div class="card-body p-0">
+                            <div class="id-card-header">
+                                <h5 class="mb-0"><i class="fas fa-id-card"></i> Teacher ID Card</h5>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-md-3 id-card-photo-section">
+                                    <div class="id-photo-container">
+                                        {% if teacher.profile_picture %}
+                                        <img src="{{ teacher.profile_picture.url }}" alt="Teacher Photo" class="id-photo">
+                                        {% else %}
+                                        <div class="id-photo-placeholder">
+                                            <i class="fas fa-user fa-5x"></i>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="id-card-logo">
+                                        <i class="fas fa-graduation-cap fa-2x"></i>
+                                        <p class="mb-0 mt-2"><small>School Management System</small></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 id-card-details">
+                                    <div class="p-4">
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                                <h3 class="text-success mb-1">{{ teacher.user.get_full_name }}</h3>
+                                                <p class="text-muted mb-0">Teaching Staff</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="id-field">
+                                                    <label><i class="fas fa-id-badge text-primary"></i> Employee ID</label>
+                                                    <p class="id-value">{{ teacher.employee_id }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="id-field">
+                                                    <label><i class="fas fa-graduation-cap text-success"></i> Qualification</label>
+                                                    <p class="id-value">{{ teacher.qualification }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="id-field">
+                                                    <label><i class="fas fa-envelope text-info"></i> Email</label>
+                                                    <p class="id-value">{{ teacher.email }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="id-field">
+                                                    <label><i class="fas fa-phone text-warning"></i> Phone</label>
+                                                    <p class="id-value">{{ teacher.phone }}</p>
+                                                </div>
+                                            </div>
+                                            {% if teacher.specialization %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="id-field">
+                                                    <label><i class="fas fa-star text-warning"></i> Specialization</label>
+                                                    <p class="id-value">{{ teacher.specialization }}</p>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="id-field">
+                                                    <label><i class="fas fa-briefcase text-danger"></i> Experience</label>
+                                                    <p class="id-value">{{ teacher.experience }} Years</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <a href="{% url 'teacher_profile' %}" class="btn btn-success btn-sm">
+                                                <i class="fas fa-user"></i> View Full Profile
+                                            </a>
+                                            <a href="{% url 'teacher_edit_profile' %}" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-edit"></i> Edit Profile
+                                            </a>
+                                            <a href="{% url 'teacher_id_card' %}" class="btn btn-info btn-sm">
+                                                <i class="fas fa-id-card"></i> View ID Card
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #4e73df;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">My Subjects</h6>
+                                    <h3>{{ total_subjects }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-book fa-2x text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #1cc88a;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Students</h6>
+                                    <h3>{{ total_students }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-users fa-2x text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #f6c23e;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Classes</h6>
+                                    <h3>{{ total_classes }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-chalkboard fa-2x text-warning"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #36b9cc;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Marks Entered</h6>
+                                    <h3>{{ marks_entered }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-edit fa-2x text-info"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Subjects -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-book"></i> My Subjects</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if subjects %}
+                            <div class="list-group">
+                                {% for subject in subjects %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ subject.name }}</h6>
+                                        <small class="text-muted">{{ subject.code }} - {{ subject.class_assigned }}</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">{{ subject.max_marks }} marks</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No subjects assigned yet. Please contact admin.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Marks -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-history"></i> Recent Marks Entered</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_marks %}
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>Subject</th>
+                                            <th>Marks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mark in recent_marks %}
+                                        <tr>
+                                            <td>{{ mark.student.user.get_full_name }}</td>
+                                            <td>{{ mark.subject.name }}</td>
+                                            <td><strong>{{ mark.marks_obtained }}/{{ mark.subject.max_marks }}</strong></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="{% url 'teacher_view_marks' %}" class="btn btn-success btn-sm">View All Marks</a>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No marks entered yet.</p>
+                            <a href="{% url 'teacher_enter_marks' %}" class="btn btn-success btn-sm mt-2">Enter Marks Now</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_students_list' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-users fa-2x mb-2"></i><br>
+                                        View Students
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_enter_marks' %}" class="btn btn-outline-success w-100 py-3">
+                                        <i class="fas fa-edit fa-2x mb-2"></i><br>
+                                        Enter Marks
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_view_marks' %}" class="btn btn-outline-info w-100 py-3">
+                                        <i class="fas fa-list fa-2x mb-2"></i><br>
+                                        View All Marks
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'teacher_profile' %}" class="btn btn-outline-warning w-100 py-3">
+                                        <i class="fas fa-user fa-2x mb-2"></i><br>
+                                        My Profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Teacher ID Card Styles */
+.teacher-id-card {
+    border: 2px solid #28a745;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.id-card-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.id-card-photo-section {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 30px 20px;
+    text-align: center;
+    border-right: 2px solid #dee2e6;
+}
+
+.id-photo-container {
+    margin-bottom: 20px;
+}
+
+.id-photo {
+    width: 180px;
+    height: 220px;
+    object-fit: cover;
+    border: 4px solid #28a745;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.id-photo-placeholder {
+    width: 180px;
+    height: 220px;
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border: 4px solid #28a745;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    margin: 0 auto;
+}
+
+.id-card-logo {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #dee2e6;
+    color: #28a745;
+}
+
+.id-card-details {
+    background: white;
+}
+
+.id-field {
+    margin-bottom: 10px;
+}
+
+.id-field label {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.id-field .id-value {
+    font-size: 16px;
+    color: #212529;
+    font-weight: 500;
+    margin: 0;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border-left: 3px solid #28a745;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .id-card-photo-section {
+        border-right: none;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .id-photo, .id-photo-placeholder {
+        width: 150px;
+        height: 180px;
+    }
+}
+</style>
+{% endblock %}

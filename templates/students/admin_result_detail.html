@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% block title %}Result Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+                <a class="nav-link active" href="{% url 'admin_manage_results' %}">
+                    <i class="fas fa-certificate"></i> Manage Results
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-certificate"></i> Result Details</h2>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'admin_edit_result' result.id %}" class="btn btn-warning">
+                        <i class="fas fa-calculator"></i> Recalculate
+                    </a>
+                    <a href="{% url 'admin_manage_results' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Results
+                    </a>
+                </div>
+            </div>
+
+            <!-- Student Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Student Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Student Name</label>
+                            <p class="h5">{{ result.student.user.get_full_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Roll Number</label>
+                            <p class="h5">{{ result.student.roll_number }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Class</label>
+                            <p class="h5">{{ result.student.student_class }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Father's Name</label>
+                            <p class="h5">{{ result.student.father_name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Summary -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Result Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Total Marks</h6>
+                                    <h3 class="text-primary">{{ result.total_marks }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Percentage</h6>
+                                    <h3 class="text-info">{{ result.percentage }}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Grade</h6>
+                                    <h3 class="text-warning">{{ result.grade }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Status</h6>
+                                    {% if result.status == 'Pass' %}
+                                    <h3 class="text-success">{{ result.status }}</h3>
+                                    {% else %}
+                                    <h3 class="text-danger">{{ result.status }}</h3>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject-wise Marks -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Subject-wise Marks</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Max Marks</th>
+                                    <th>Pass Marks</th>
+                                    <th>Marks Obtained</th>
+                                    <th>Percentage</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mark in marks %}
+                                <tr>
+                                    <td><strong>{{ mark.subject.name }}</strong></td>
+                                    <td>{{ mark.subject.max_marks }}</td>
+                                    <td>{{ mark.subject.pass_marks }}</td>
+                                    <td>{{ mark.marks_obtained }}</td>
+                                    <td>
+                                        {% widthratio mark.marks_obtained mark.subject.max_marks 100 %}%
+                                    </td>
+                                    <td>
+                                        {% if mark.marks_obtained >= mark.subject.pass_marks %}
+                                        <span class="badge bg-success">Pass</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Fail</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publish/Unpublish Actions -->
+            <div class="card">
+                <div class="card-header {% if result.published %}bg-success{% else %}bg-warning{% endif %} text-white">
+                    <h5 class="mb-0"><i class="fas fa-toggle-on"></i> Publication Status</h5>
+                </div>
+                <div class="card-body">
+                    {% if result.published %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> This result is <strong>PUBLISHED</strong> and visible to the student.
+                    </div>
+                    <form method="post" action="{% url 'admin_publish_result' result.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="unpublish">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-eye-slash"></i> Unpublish Result
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> This result is <strong>UNPUBLISHED</strong> and not visible to the student.
+                    </div>
+                    <form method="post" action="{% url 'admin_publish_result' result.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="publish">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check-circle"></i> Publish Result
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+ 
+ 1 3   F e b r u a r y   2 0 2 6   0 1 : 2 8 : 5 1   A M  
+  
+  
+ 

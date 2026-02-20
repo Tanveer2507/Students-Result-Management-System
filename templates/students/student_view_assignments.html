@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}My Assignments - Student{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">STUDENT PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'student_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link active" href="{% url 'student_view_assignments' %}"><i class="fas fa-tasks"></i> Assignments</a>
+            </nav>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2><i class="fas fa-tasks"></i> My Assignments</h2>
+            
+            <div class="row mt-4">
+                {% for assignment in assignments %}
+                <div class="col-md-6 mb-4">
+                    <div class="card {% if assignment.is_submitted %}border-success{% endif %}">
+                        <div class="card-header {% if assignment.is_submitted %}bg-success text-white{% else %}bg-primary text-white{% endif %}">
+                            <h5 class="mb-0">{{ assignment.title }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+                            <p><strong>Max Marks:</strong> {{ assignment.max_marks }}</p>
+                            <p><strong>Due Date:</strong> {{ assignment.due_date|date:"d M Y, h:i A" }}</p>
+                            <p><strong>Status:</strong> 
+                                {% if assignment.is_submitted %}
+                                <span class="badge bg-success">Submitted</span>
+                                {% else %}
+                                <span class="badge bg-warning">Not Submitted</span>
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'student_assignment_detail' assignment.id %}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No assignments available yet.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

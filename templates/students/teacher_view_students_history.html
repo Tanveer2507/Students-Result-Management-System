@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}Students History - Teacher{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link" href="{% url 'teacher_enter_marks' %}">
+                    <i class="fas fa-edit"></i> Enter Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_marks' %}">
+                    <i class="fas fa-chart-bar"></i> View Marks
+                </a>
+                <a class="nav-link active" href="{% url 'teacher_view_students_history' %}">
+                    <i class="fas fa-history"></i> Students History
+                </a>
+                <a class="nav-link" href="{% url 'teacher_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'teacher_id_card' %}">
+                    <i class="fas fa-id-card"></i> ID Card
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-history"></i> Students History</h2>
+                <a href="{% url 'teacher_students_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Students
+                </a>
+            </div>
+
+            <!-- Info Card -->
+            <div class="alert alert-info mb-4">
+                <i class="fas fa-info-circle"></i> This page shows the complete change history of all students in your classes. You can track all modifications made to student records.
+            </div>
+
+            <!-- Students Summary -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-users"></i> Your Students ({{ students.count }})</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for student in students|slice:":12" %}
+                                <div class="col-md-3 mb-2">
+                                    <div class="border rounded p-2">
+                                        <small><strong>{{ student.roll_number }}</strong></small><br>
+                                        <small>{{ student.user.get_full_name }}</small><br>
+                                        <small class="text-muted">{{ student.student_class }}</small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if students.count > 12 %}
+                            <p class="text-muted mb-0 mt-2">
+                                <small>... and {{ students.count|add:"-12" }} more students</small>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> Recent Changes (Last 50 Records)</h5>
+                </div>
+                <div class="card-body">
+                    {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="15%">Date & Time</th>
+                                    <th width="20%">Student</th>
+                                    <th width="15%">Roll Number</th>
+                                    <th width="15%">Class</th>
+                                    <th width="15%">Modified By</th>
+                                    <th width="10%">Action</th>
+                                    <th width="10%">Changes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in history %}
+                                {% with student=student_map|get:entry.object_id %}
+                                <tr>
+                                    <td>
+                                        <small>
+                                            <i class="fas fa-calendar"></i> {{ entry.action_time|date:"d M Y" }}<br>
+                                            <i class="fas fa-clock"></i> {{ entry.action_time|date:"h:i A" }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        {% if student %}
+                                        <strong>{{ student.user.get_full_name }}</strong>
+                                        {% else %}
+                                        <span class="text-muted">Student not found</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if student %}
+                                        <span class="badge bg-primary">{{ student.roll_number }}</span>
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if student %}
+                                        {{ student.student_class }}
+                                        {% else %}
+                                        <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <i class="fas fa-user"></i> {{ entry.user.username }}
+                                    </td>
+                                    <td>
+                                        {% if entry.action_flag == 1 %}
+                                        <span class="badge bg-success">Added</span>
+                                        {% elif entry.action_flag == 2 %}
+                                        <span class="badge bg-warning">Changed</span>
+                                        {% elif entry.action_flag == 3 %}
+                                        <span class="badge bg-danger">Deleted</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Unknown</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ entry.change_message|default:"No details" }}</small>
+                                    </td>
+                                </tr>
+                                {% endwith %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> No history records found for your students.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="mb-3"><i class="fas fa-info-circle"></i> Legend:</h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="badge bg-success">Added</span> - New student record created
+                        </div>
+                        <div class="col-md-3">
+                            <span class="badge bg-warning">Changed</span> - Student record modified
+                        </div>
+                        <div class="col-md-3">
+                            <span class="badge bg-danger">Deleted</span> - Student record removed
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

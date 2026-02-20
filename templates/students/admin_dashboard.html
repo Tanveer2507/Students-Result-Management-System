@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_profile' %}">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_all_students_history' %}">
+                    <i class="fas fa-history"></i> Students History
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_all_teachers_history' %}">
+                    <i class="fas fa-history"></i> Teachers History
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_login_history' %}">
+                    <i class="fas fa-sign-in-alt"></i> Login History
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_admin_history' %}">
+                    <i class="fas fa-user-clock"></i> My History
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_results' %}">
+                    <i class="fas fa-certificate"></i> Manage Results
+                </a>
+                <a class="nav-link" href="/admin/">
+                    <i class="fas fa-cog"></i> Django Admin
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4">Admin Dashboard</h2>
+
+            <!-- Welcome Card -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card bg-gradient-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas fa-user-shield fa-3x"></i>
+                                </div>
+                                <div>
+                                    <h3 class="mb-1">Welcome, Administrator!</h3>
+                                    <p class="mb-0">Manage all system data from this central dashboard</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #667eea;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Students</h6>
+                                    <h3 style="color: #667eea;">{{ total_students }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-user-graduate fa-2x" style="color: #667eea;"></i>
+                                </div>
+                            </div>
+                            <a href="{% url 'admin_manage_students' %}" class="btn btn-primary btn-sm mt-2">
+                                <i class="fas fa-eye"></i> View All
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #764ba2;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Teachers</h6>
+                                    <h3 style="color: #764ba2;">{{ total_teachers }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-chalkboard-teacher fa-2x" style="color: #764ba2;"></i>
+                                </div>
+                            </div>
+                            <a href="{% url 'admin_manage_teachers' %}" class="btn btn-primary btn-sm mt-2">
+                                <i class="fas fa-eye"></i> View All
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #667eea;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Classes</h6>
+                                    <h3 style="color: #667eea;">{{ total_classes }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-school fa-2x" style="color: #667eea;"></i>
+                                </div>
+                            </div>
+                            <a href="{% url 'admin_manage_classes' %}" class="btn btn-primary btn-sm mt-2">
+                                <i class="fas fa-eye"></i> View All
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card" style="border-left-color: #764ba2;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Subjects</h6>
+                                    <h3 style="color: #764ba2;">{{ total_subjects }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-book fa-2x" style="color: #764ba2;"></i>
+                                </div>
+                            </div>
+                            <a href="{% url 'admin_manage_subjects' %}" class="btn btn-primary btn-sm mt-2">
+                                <i class="fas fa-eye"></i> View All
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Published Results Card -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card stat-card" style="border-left-color: #667eea;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-2"><i class="fas fa-certificate"></i> Published Results</h5>
+                                    <h2 class="mb-0" style="color: #667eea;">{{ published_results }}</h2>
+                                    <p class="text-muted mb-0">Results available for students to view</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-certificate fa-4x" style="color: #667eea;"></i>
+                                </div>
+                            </div>
+                            <a href="{% url 'admin_manage_results' %}" class="btn btn-primary btn-sm mt-2">
+                                <i class="fas fa-eye"></i> Manage Results
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Students and Teachers -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Recent Students</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_students %}
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Roll No</th>
+                                            <th>Name</th>
+                                            <th>Class</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for student in recent_students %}
+                                        <tr>
+                                            <td>{{ student.roll_number }}</td>
+                                            <td>{{ student.user.get_full_name }}</td>
+                                            <td>{{ student.student_class }}</td>
+                                            <td>
+                                                <a href="{% url 'admin_student_detail' student.id %}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="{% url 'admin_manage_students' %}" class="btn btn-primary btn-sm">View All Students</a>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No students registered yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Recent Teachers</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_teachers %}
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Employee ID</th>
+                                            <th>Name</th>
+                                            <th>Qualification</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for teacher in recent_teachers %}
+                                        <tr>
+                                            <td>{{ teacher.employee_id }}</td>
+                                            <td>{{ teacher.user.get_full_name }}</td>
+                                            <td>{{ teacher.qualification }}</td>
+                                            <td>
+                                                <a href="{% url 'admin_teacher_detail' teacher.id %}" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="{% url 'admin_manage_teachers' %}" class="btn btn-success btn-sm">View All Teachers</a>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No teachers registered yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'admin_manage_students' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-user-graduate fa-2x mb-2"></i><br>
+                                        Manage Students
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'admin_manage_teachers' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i><br>
+                                        Manage Teachers
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'admin_manage_classes' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-school fa-2x mb-2"></i><br>
+                                        Manage Classes
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'admin_manage_subjects' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-book fa-2x mb-2"></i><br>
+                                        Manage Subjects
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

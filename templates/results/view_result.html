@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}View Result{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Student Result Card</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <p><strong>Name:</strong> {{ student.user.get_full_name }}</p>
+                    <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+                    <p><strong>Class:</strong> {{ student.student_class }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Father's Name:</strong> {{ student.father_name }}</p>
+                    <p><strong>Mother's Name:</strong> {{ student.mother_name }}</p>
+                    <p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
+                </div>
+            </div>
+            <h5 class="mb-3">Subject-wise Marks</h5>
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr><th>Subject</th><th>Max Marks</th><th>Marks Obtained</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for mark in marks %}
+                    <tr>
+                        <td>{{ mark.subject.name }}</td>
+                        <td>{{ mark.subject.max_marks }}</td>
+                        <td>{{ mark.marks_obtained }}</td>
+                        <td>
+                            {% if mark.marks_obtained >= mark.subject.pass_marks %}
+                            <span class="badge bg-success">Pass</span>
+                            {% else %}
+                            <span class="badge bg-danger">Fail</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if result %}
+            <div class="alert {% if result.status == 'Pass' %}alert-success{% else %}alert-danger{% endif %} mt-4">
+                <div class="row text-center">
+                    <div class="col-md-3"><h5>Total Marks</h5><p class="mb-0">{{ result.total_marks }}</p></div>
+                    <div class="col-md-3"><h5>Percentage</h5><p class="mb-0">{{ result.percentage }}%</p></div>
+                    <div class="col-md-3"><h5>Grade</h5><p class="mb-0">{{ result.grade }}</p></div>
+                    <div class="col-md-3"><h5>Status</h5><p class="mb-0">{{ result.status }}</p></div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">Result not generated yet</div>
+            {% endif %}
+            <div class="text-center mt-3">
+                <a href="{% url 'student_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

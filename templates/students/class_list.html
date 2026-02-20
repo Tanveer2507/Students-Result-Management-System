@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Classes{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3"><h6 class="text-muted">ADMIN PANEL</h6></div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link" href="{% url 'student_list' %}"><i class="fas fa-user-graduate"></i> Students</a>
+                <a class="nav-link active" href="{% url 'class_list' %}"><i class="fas fa-chalkboard"></i> Classes</a>
+                <a class="nav-link" href="{% url 'subject_list' %}"><i class="fas fa-book"></i> Subjects</a>
+                <a class="nav-link" href="{% url 'all_results' %}"><i class="fas fa-chart-bar"></i> Results</a>
+            </nav>
+        </div>
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between mb-4">
+                <h2>Classes</h2>
+                <a href="{% url 'add_class' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Class</a>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr><th>Class Name</th><th>Section</th><th>Created</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for class in classes %}
+                            <tr><td>{{ class.name }}</td><td>{{ class.section }}</td><td>{{ class.created_at|date:"M d, Y" }}</td></tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center">No classes found</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

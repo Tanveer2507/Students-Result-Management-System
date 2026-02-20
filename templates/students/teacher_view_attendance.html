@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}View Attendance - Teacher{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link" href="{% url 'teacher_mark_attendance' %}"><i class="fas fa-calendar-check"></i> Mark Attendance</a>
+                <a class="nav-link active" href="{% url 'teacher_view_attendance' %}"><i class="fas fa-list"></i> View Attendance</a>
+            </nav>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2><i class="fas fa-list"></i> Attendance Records</h2>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <input type="date" class="form-control" name="start_date" value="{{ start_date }}" placeholder="Start Date">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" class="form-control" name="end_date" value="{{ end_date }}" placeholder="End Date">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" name="class_id">
+                                <option value="">All Classes</option>
+                                {% for class in classes %}
+                                <option value="{{ class.id }}" {% if class_filter == class.id|stringformat:"s" %}selected{% endif %}>{{ class.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                        </div>
+                    </form>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student</th>
+                                    <th>Roll No</th>
+                                    <th>Class</th>
+                                    <th>Status</th>
+                                    <th>Marked By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in attendance_records %}
+                                <tr>
+                                    <td>{{ record.date }}</td>
+                                    <td>{{ record.student.user.get_full_name }}</td>
+                                    <td>{{ record.student.roll_number }}</td>
+                                    <td>{{ record.student.student_class }}</td>
+                                    <td>
+                                        {% if record.status == 'present' %}
+                                        <span class="badge bg-success">Present</span>
+                                        {% elif record.status == 'absent' %}
+                                        <span class="badge bg-danger">Absent</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Late</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ record.marked_by.username }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No attendance records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

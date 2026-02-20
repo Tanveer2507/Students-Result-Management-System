@@ -1,0 +1,58 @@
+{% load static %}
+<!-- Logo Component with Fallback -->
+<div class="srms-logo-container" style="display: inline-block;">
+    <img src="{% static 'images/logo.png' %}" 
+         alt="Student Result Management System" 
+         class="srms-logo"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+         style="max-width: 100%; height: auto;">
+    
+    <!-- Fallback SVG Logo if image fails to load -->
+    <div class="srms-logo-fallback" style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        <div style="position: relative; width: 100%; max-width: 300px;">
+            <!-- Book Base -->
+            <svg viewBox="0 0 300 200" style="width: 100%; height: auto;">
+                <!-- Open Book -->
+                <path d="M 50 120 Q 50 100 70 100 L 140 100 Q 150 100 150 110 L 150 160 Q 150 170 140 170 L 70 170 Q 50 170 50 150 Z" 
+                      fill="#f0f0f0" stroke="#ff8c00" stroke-width="3"/>
+                <path d="M 150 110 Q 150 100 160 100 L 230 100 Q 250 100 250 120 L 250 150 Q 250 170 230 170 L 160 170 Q 150 170 150 160 Z" 
+                      fill="#f0f0f0" stroke="#ff8c00" stroke-width="3"/>
+                
+                <!-- Student Figure -->
+                <circle cx="150" cy="70" r="15" fill="#4e9af1"/>
+                <path d="M 150 85 L 150 110" stroke="#4e9af1" stroke-width="8" stroke-linecap="round"/>
+                <path d="M 140 95 L 150 90 L 160 95" stroke="#4e9af1" stroke-width="6" stroke-linecap="round" fill="none"/>
+                
+                <!-- Star -->
+                <path d="M 150 20 L 155 35 L 170 35 L 158 45 L 163 60 L 150 50 L 137 60 L 142 45 L 130 35 L 145 35 Z" 
+                      fill="#ffd700" stroke="#ff8c00" stroke-width="2"/>
+                
+                <!-- Charts -->
+                <rect x="80" y="130" width="15" height="30" fill="#4caf50" rx="2"/>
+                <rect x="100" y="120" width="15" height="40" fill="#ff9800" rx="2"/>
+                <rect x="120" y="110" width="15" height="50" fill="#2196f3" rx="2"/>
+                
+                <!-- Checkmark -->
+                <path d="M 175 130 L 185 145 L 210 115" stroke="#4caf50" stroke-width="6" 
+                      stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                
+                <!-- Arc -->
+                <path d="M 100 80 Q 150 60 200 80" stroke="#ff8c00" stroke-width="4" 
+                      fill="none" stroke-linecap="round"/>
+                <path d="M 120 90 Q 150 75 180 90" stroke="#4caf50" stroke-width="4" 
+                      fill="none" stroke-linecap="round"/>
+            </svg>
+            
+            <!-- Text -->
+            <div style="margin-top: 10px;">
+                <div style="font-size: 2em; font-weight: bold; line-height: 1;">
+                    <span style="color: #2196f3;">Student</span>
+                    <span style="color: #4caf50;">Result</span>
+                </div>
+                <div style="font-size: 0.8em; color: #666; letter-spacing: 2px; margin-top: 5px;">
+                    MANAGEMENT SYSTEM
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">STUDENT PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'student_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'student_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'student_marks_detail' %}">
+                    <i class="fas fa-chart-line"></i> My Marks
+                </a>
+                <a class="nav-link" href="{% url 'student_result_detail' %}">
+                    <i class="fas fa-certificate"></i> My Result
+                </a>
+                <a class="nav-link" href="{% url 'student_id_card' %}">
+                    <i class="fas fa-id-card"></i> ID Card
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>My Profile</h2>
+                <a href="{% url 'edit_student_profile' %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'edit_student_profile' %}" class="btn btn-outline-primary w-100 py-3">
+                                        <i class="fas fa-edit fa-2x mb-2"></i><br>
+                                        Edit Profile
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'student_marks_detail' %}" class="btn btn-outline-success w-100 py-3">
+                                        <i class="fas fa-chart-line fa-2x mb-2"></i><br>
+                                        View Marks
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'student_result_detail' %}" class="btn btn-outline-info w-100 py-3">
+                                        <i class="fas fa-certificate fa-2x mb-2"></i><br>
+                                        View Result
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'student_id_card' %}" class="btn btn-outline-secondary w-100 py-3">
+                                        <i class="fas fa-id-card fa-2x mb-2"></i><br>
+                                        ID Card
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'change_password' %}" class="btn btn-outline-warning w-100 py-3">
+                                        <i class="fas fa-key fa-2x mb-2"></i><br>
+                                        Change Password
+                                    </a>
+                                </div>
+                                {% if result %}
+                                <div class="col-md-3 mb-3">
+                                    <a href="{% url 'download_marksheet' %}" class="btn btn-outline-danger w-100 py-3">
+                                        <i class="fas fa-file-pdf fa-2x mb-2"></i><br>
+                                        Download Marksheet
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Summary -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-graduation-cap"></i> Academic Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 mb-2">
+                                        <h3 class="text-primary">{{ student.student_class }}</h3>
+                                        <p class="text-muted mb-0">Current Class</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 mb-2">
+                                        <h3 class="text-success">{{ total_subjects }}</h3>
+                                        <p class="text-muted mb-0">Total Subjects</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 mb-2">
+                                        <h3 class="text-info">{% if result %}{{ result.percentage }}%{% else %}N/A{% endif %}</h3>
+                                        <p class="text-muted mb-0">Overall %</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 mb-2">
+                                        <h3 class="text-warning">{% if result %}{{ result.grade }}{% else %}N/A{% endif %}</h3>
+                                        <p class="text-muted mb-0">Grade</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Profile Picture & Basic Info -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                {% if student.profile_picture %}
+                                <img src="{{ student.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #4e73df;">
+                                {% else %}
+                                <div style="width: 150px; height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 64px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <h4>{{ student.user.get_full_name }}</h4>
+                            <p class="text-muted">{{ student.roll_number }}</p>
+                            <p class="badge bg-primary">{{ student.student_class }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Information -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-user"></i> First Name:</strong></p>
+                                    <p class="text-muted">{{ student.user.first_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-user"></i> Last Name:</strong></p>
+                                    <p class="text-muted">{{ student.user.last_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-id-card"></i> Roll Number:</strong></p>
+                                    <p class="text-muted">{{ student.roll_number }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-chalkboard"></i> Class:</strong></p>
+                                    <p class="text-muted">{{ student.student_class }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-birthday-cake"></i> Date of Birth:</strong></p>
+                                    <p class="text-muted">{{ student.date_of_birth|date:"F d, Y" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-venus-mars"></i> Gender:</strong></p>
+                                    <p class="text-muted">{{ student.get_gender_display }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-users"></i> Family Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-male"></i> Father's Name:</strong></p>
+                                    <p class="text-muted">{{ student.father_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-female"></i> Mother's Name:</strong></p>
+                                    <p class="text-muted">{{ student.mother_name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-address-book"></i> Contact Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-envelope"></i> Email:</strong></p>
+                                    <p class="text-muted">{{ student.user.email }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong><i class="fas fa-phone"></i> Phone:</strong></p>
+                                    <p class="text-muted">{{ student.phone }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><strong><i class="fas fa-map-marker-alt"></i> Address:</strong></p>
+                                    <p class="text-muted">{{ student.address }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

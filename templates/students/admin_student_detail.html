@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}Student Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-user-graduate"></i> Student Details</h2>
+                <div>
+                    <a href="{% url 'admin_edit_student' student.id %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit Student
+                    </a>
+                    <a href="{% url 'admin_manage_students' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Profile Card -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            {% if student.profile_picture %}
+                            <img src="{{ student.profile_picture.url }}" alt="Profile" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #4e73df;">
+                            {% else %}
+                            <div style="width: 150px; height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 64px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            {% endif %}
+                            <h4 class="mt-3">{{ student.user.get_full_name }}</h4>
+                            <p class="text-muted">{{ student.roll_number }}</p>
+                            <p class="badge bg-primary">{{ student.student_class }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Card -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Roll Number:</strong></p>
+                                    <p class="text-muted">{{ student.roll_number }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Class:</strong></p>
+                                    <p class="text-muted">{{ student.student_class }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Email:</strong></p>
+                                    <p class="text-muted">{{ student.user.email }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Phone:</strong></p>
+                                    <p class="text-muted">{{ student.phone }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Father's Name:</strong></p>
+                                    <p class="text-muted">{{ student.father_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Mother's Name:</strong></p>
+                                    <p class="text-muted">{{ student.mother_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><strong>Address:</strong></p>
+                                    <p class="text-muted">{{ student.address }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Marks Card -->
+                    <div class="card mt-3">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Marks</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if marks %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Marks Obtained</th>
+                                            <th>Max Marks</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for mark in marks %}
+                                        <tr>
+                                            <td>{{ mark.subject.name }}</td>
+                                            <td>{{ mark.marks_obtained }}</td>
+                                            <td>{{ mark.subject.max_marks }}</td>
+                                            <td>
+                                                {% if mark.marks_obtained >= mark.subject.pass_marks %}
+                                                <span class="badge bg-success">Pass</span>
+                                                {% else %}
+                                                <span class="badge bg-danger">Fail</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No marks available.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

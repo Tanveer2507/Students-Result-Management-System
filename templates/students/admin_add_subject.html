@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Add New Subject{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link active" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_results' %}">
+                    <i class="fas fa-certificate"></i> Manage Results
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-plus"></i> Add New Subject</h2>
+                <a href="{% url 'admin_manage_subjects' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Subjects
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-book"></i> Subject Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Subject Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="name" placeholder="e.g., Mathematics" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Subject Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="code" placeholder="e.g., MATH101" required>
+                                <small class="text-muted">Must be unique</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Class <span class="text-danger">*</span></label>
+                                <select class="form-select" name="class_id" required>
+                                    <option value="">-- Select Class --</option>
+                                    {% for class in classes %}
+                                    <option value="{{ class.id }}">{{ class }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Maximum Marks <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="max_marks" value="100" min="1" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Pass Marks <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="pass_marks" value="35" min="1" required>
+                                <small class="text-muted">Must be less than or equal to max marks</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'admin_manage_subjects' %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-save"></i> Add Subject
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <i class="fas fa-trash-alt fa-4x text-danger mb-3"></i>
+                            <h4>Are you sure you want to delete this {{ object_type }}?</h4>
+                            
+                            <div class="alert alert-warning mt-3">
+                                <strong>Warning:</strong> This action cannot be undone!
+                            </div>
+
+                            <div class="card bg-light mt-3">
+                                <div class="card-body">
+                                    <h5>{{ object_type }} Details:</h5>
+                                    <p class="mb-1"><strong>Name:</strong> {{ object.user.get_full_name }}</p>
+                                    {% if object_type == 'Student' %}
+                                    <p class="mb-1"><strong>Roll Number:</strong> {{ object.roll_number }}</p>
+                                    <p class="mb-0"><strong>Class:</strong> {{ object.student_class }}</p>
+                                    {% else %}
+                                    <p class="mb-1"><strong>Employee ID:</strong> {{ object.employee_id }}</p>
+                                    <p class="mb-0"><strong>Qualification:</strong> {{ object.qualification }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <form method="post" class="mt-4">
+                                {% csrf_token %}
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-danger btn-lg">
+                                        <i class="fas fa-trash"></i> Yes, Delete {{ object_type }}
+                                    </button>
+                                    <a href="{% url cancel_url %}" class="btn btn-secondary btn-lg">
+                                        <i class="fas fa-times"></i> No, Cancel
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

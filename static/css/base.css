@@ -1,0 +1,447 @@
+/* Base CSS - Main Styles */
+
+:root {
+    --primary-color: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #06b6d4;
+    --navbar-bg-start: #667eea;
+    --navbar-bg-end: #764ba2;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fc;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Navbar Styles - Modern Website Design */
+.main-navbar {
+    background: linear-gradient(135deg, var(--navbar-bg-start) 0%, var(--navbar-bg-end) 100%);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.25);
+    padding: 15px 0;
+    backdrop-filter: blur(10px);
+    position: relative;
+    border-bottom: none;
+    z-index: 99998 !important;
+}
+
+.main-navbar .navbar-nav {
+    position: relative;
+    z-index: 99999 !important;
+}
+
+.main-navbar .nav-item.dropdown {
+    position: relative;
+    z-index: 99999 !important;
+}
+
+.main-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    pointer-events: none;
+}
+
+.main-navbar .navbar-brand {
+    font-size: 26px;
+    font-weight: 700;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+.main-navbar .navbar-brand i {
+    margin-right: 10px;
+    font-size: 28px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.main-navbar .nav-link {
+    color: rgba(255,255,255,0.95) !important;
+    font-weight: 500;
+    padding: 10px 18px !important;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 0 4px;
+    position: relative;
+    z-index: 1;
+}
+
+.main-navbar .nav-link:hover {
+    color: white !important;
+    background-color: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.main-navbar .nav-link.active {
+    background-color: rgba(255,255,255,0.2);
+    color: white !important;
+}
+
+.main-navbar .dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    border-radius: 6px;
+    padding: 4px;
+    margin-top: 4px;
+    background: white;
+    z-index: 99999 !important;
+    min-width: 130px;
+    max-width: 145px;
+    position: absolute !important;
+}
+
+.main-navbar .dropdown-item {
+    padding: 6px 10px;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin: 1px 0;
+    font-weight: 500;
+    font-size: 12px;
+    white-space: nowrap;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+}
+
+.main-navbar .dropdown-item:hover {
+    background: linear-gradient(135deg, var(--navbar-bg-start) 0%, var(--navbar-bg-end) 100%);
+    color: white;
+    transform: translateX(2px);
+}
+
+.main-navbar .dropdown-item i {
+    margin-right: 6px;
+    width: 12px;
+    text-align: center;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+/* Responsive adjustments for dropdown */
+@media (max-width: 768px) {
+    .main-navbar .dropdown-menu {
+        min-width: 120px;
+        max-width: 135px;
+        padding: 3px;
+    }
+    
+    .main-navbar .dropdown-item {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+    
+    .main-navbar .dropdown-item i {
+        font-size: 10px;
+        width: 11px;
+        margin-right: 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-navbar .dropdown-menu {
+        min-width: 110px;
+        max-width: 125px;
+        padding: 3px;
+    }
+    
+    .main-navbar .dropdown-item {
+        padding: 5px 7px;
+        font-size: 10px;
+    }
+    
+    .main-navbar .dropdown-item i {
+        font-size: 9px;
+        width: 10px;
+        margin-right: 4px;
+    }
+}
+
+.main-navbar .navbar-toggler {
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+}
+
+.main-navbar .navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.25);
+}
+
+.main-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.95%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 0;
+    border-top: none;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    min-height: calc(100vh - 56px);
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.sidebar .nav-link {
+    color: #333 !important;
+    padding: 12px 20px;
+    border-left: 3px solid transparent;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fc;
+    border-left-color: #667eea !important;
+    color: #667eea !important;
+}
+
+.sidebar .nav-link.active {
+    background-color: #f8f9fc;
+    border-left-color: #667eea !important;
+    color: #667eea !important;
+}
+
+/* Footer Styles - Modern Design */
+.main-footer {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    padding: 50px 0 20px;
+    margin-top: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-footer h5 {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.main-footer a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.main-footer a:hover {
+    color: white;
+    transform: translateX(5px);
+}
+
+.main-footer .footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.main-footer .footer-links li {
+    margin-bottom: 12px;
+}
+
+.main-footer .footer-links li a {
+    display: flex;
+    align-items: center;
+}
+
+.main-footer .footer-links li a i {
+    margin-right: 8px;
+    color: var(--navbar-bg-start);
+}
+
+.main-footer .social-links a {
+    display: inline-block;
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 42px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.main-footer .social-links a:hover {
+    background: linear-gradient(135deg, var(--navbar-bg-start) 0%, var(--navbar-bg-end) 100%);
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 40px;
+    padding-top: 25px;
+    text-align: center;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+}
+
+
+
+/* Card Styles - Modern Design */
+.card {
+    border: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    margin-bottom: 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    transform: translateY(-2px);
+}
+
+.stat-card {
+    border-left: 4px solid var(--primary-color);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--navbar-bg-start) 0%, var(--navbar-bg-end) 100%);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, var(--navbar-bg-end) 0%, var(--navbar-bg-start) 100%);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+
+
+/* Toast Notification Styles */
+.toast-container {
+    z-index: 9999 !important;
+}
+
+.toast {
+    min-width: 300px;
+    max-width: 400px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast.hide {
+    animation: slideOutRight 0.3s ease-out;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast-body {
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-error, .bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+.toast .btn-close-white {
+    filter: brightness(0) invert(1);
+}
+
+.bg-warning .btn-close-white {
+    filter: brightness(0);
+}

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %}My History - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_all_students_history' %}">
+                    <i class="fas fa-user-graduate"></i> Students History
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_all_teachers_history' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Teachers History
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_login_history' %}">
+                    <i class="fas fa-sign-in-alt"></i> Login History
+                </a>
+                <a class="nav-link active" href="{% url 'admin_view_admin_history' %}">
+                    <i class="fas fa-history"></i> My History
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-history"></i> My Activity History</h2>
+                <div>
+                    <span class="badge bg-primary">{{ request.user.username }}</span>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-primary">{{ total_actions }}</h3>
+                            <p class="mb-0">Total Actions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-success">{{ today_actions }}</h3>
+                            <p class="mb-0">Today</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-info">{{ week_actions }}</h3>
+                            <p class="mb-0">This Week</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-warning">{{ history.count }}</h3>
+                            <p class="mb-0">Recent (100)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Breakdown -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Action Breakdown</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded">
+                                <h4 class="text-success">{{ additions }}</h4>
+                                <p class="mb-0"><i class="fas fa-plus-circle"></i> Additions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded">
+                                <h4 class="text-warning">{{ changes }}</h4>
+                                <p class="mb-0"><i class="fas fa-edit"></i> Changes</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded">
+                                <h4 class="text-danger">{{ deletions }}</h4>
+                                <p class="mb-0"><i class="fas fa-trash"></i> Deletions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Recent Activity (Last 100 Records)</h5>
+                </div>
+                <div class="card-body">
+                    {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="20%">Date & Time</th>
+                                    <th width="15%">Action</th>
+                                    <th width="20%">Object Type</th>
+                                    <th width="45%">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in history %}
+                                <tr>
+                                    <td>
+                                        <small>
+                                            <i class="fas fa-calendar"></i> {{ entry.action_time|date:"d M Y" }}<br>
+                                            <i class="fas fa-clock"></i> {{ entry.action_time|date:"h:i:s A" }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        {% if entry.action_flag == 1 %}
+                                        <span class="badge bg-success"><i class="fas fa-plus"></i> Added</span>
+                                        {% elif entry.action_flag == 2 %}
+                                        <span class="badge bg-warning"><i class="fas fa-edit"></i> Changed</span>
+                                        {% elif entry.action_flag == 3 %}
+                                        <span class="badge bg-danger"><i class="fas fa-trash"></i> Deleted</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Unknown</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ entry.content_type.model|title }}</span>
+                                        {% if entry.object_repr %}
+                                        <br><small class="text-muted">{{ entry.object_repr|truncatewords:5 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ entry.change_message|default:"No details available" }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No activity history found. Start managing the system to see your activity here.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Info Card -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="mb-3"><i class="fas fa-info-circle"></i> About Activity History:</h6>
+                    <p class="mb-2">This page shows all actions you have performed in the system, including:</p>
+                    <ul>
+                        <li>Adding new students, teachers, classes, or subjects</li>
+                        <li>Modifying existing records</li>
+                        <li>Deleting records</li>
+                        <li>Publishing results</li>
+                        <li>Any other administrative actions</li>
+                    </ul>
+                    <p class="mb-0 text-muted">
+                        <small><i class="fas fa-shield-alt"></i> All actions are logged for security and audit purposes.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

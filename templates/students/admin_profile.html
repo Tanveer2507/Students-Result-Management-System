@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Profile - SRMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'admin_profile' %}">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_results' %}">
+                    <i class="fas fa-certificate"></i> Manage Results
+                </a>
+                <a class="nav-link" href="/admin/">
+                    <i class="fas fa-cog"></i> Django Admin
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-user-shield" style="color: #667eea;"></i> Admin Profile</h2>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'admin_edit_profile' %}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                    <a href="{% url 'admin_id_card' %}" class="btn btn-info">
+                        <i class="fas fa-id-card"></i> View ID Card
+                    </a>
+                    <a href="{% url 'admin_change_password' %}" class="btn btn-warning">
+                        <i class="fas fa-key"></i> Change Password
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="profile-icon mb-3">
+                                <i class="fas fa-user-shield fa-5x" style="color: white;"></i>
+                            </div>
+                            <h4 class="mb-1">{{ user.get_full_name|default:user.username }}</h4>
+                            <p class="text-muted mb-3">
+                                <span class="badge bg-primary">Administrator</span>
+                            </p>
+                            <div class="text-start">
+                                <p class="mb-2">
+                                    <i class="fas fa-user" style="color: #667eea;"></i>
+                                    <strong>Username:</strong> {{ user.username }}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-envelope" style="color: #667eea;"></i>
+                                    <strong>Email:</strong> {{ user.email|default:"Not set" }}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-calendar" style="color: #667eea;"></i>
+                                    <strong>Joined:</strong> {{ user.date_joined|date:"M d, Y" }}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-clock" style="color: #667eea;"></i>
+                                    <strong>Last Login:</strong> {{ user.last_login|date:"M d, Y H:i" }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <!-- Personal Information -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">First Name</label>
+                                    <p class="mb-0"><strong>{{ user.first_name|default:"Not set" }}</strong></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Last Name</label>
+                                    <p class="mb-0"><strong>{{ user.last_name|default:"Not set" }}</strong></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Email Address</label>
+                                    <p class="mb-0"><strong>{{ user.email|default:"Not set" }}</strong></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Phone Number</label>
+                                    <p class="mb-0"><strong>{{ profile.phone|default:"Not set" }}</strong></p>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="text-muted small">Address</label>
+                                    <p class="mb-0"><strong>{{ profile.address|default:"Not set" }}</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Information -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-shield-alt"></i> Account Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Role</label>
+                                    <p class="mb-0">
+                                        <span class="badge bg-primary">
+                                            <i class="fas fa-user-shield"></i> Administrator
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Account Status</label>
+                                    <p class="mb-0">
+                                        {% if user.is_active %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle"></i> Active
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-times-circle"></i> Inactive
+                                            </span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Superuser Status</label>
+                                    <p class="mb-0">
+                                        {% if user.is_superuser %}
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="fas fa-crown"></i> Superuser
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-user"></i> Regular Admin
+                                            </span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small">Staff Status</label>
+                                    <p class="mb-0">
+                                        {% if user.is_staff %}
+                                            <span class="badge bg-info">
+                                                <i class="fas fa-user-tie"></i> Staff Member
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-user"></i> Non-Staff
+                                            </span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <a href="{% url 'admin_edit_profile' %}" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-edit"></i> Edit Profile
+                                    </a>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <a href="{% url 'admin_id_card' %}" class="btn btn-outline-info w-100">
+                                        <i class="fas fa-id-card"></i> View ID Card
+                                    </a>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <a href="{% url 'admin_change_password' %}" class="btn btn-outline-warning w-100">
+                                        <i class="fas fa-key"></i> Change Password
+                                    </a>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                                    </a>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <a href="/admin/" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-cog"></i> Django Admin
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .sidebar {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        border-right: 1px solid #dee2e6;
+    }
+    .sidebar .nav-link {
+        color: #495057;
+        padding: 12px 20px;
+        border-left: 3px solid transparent;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+    }
+    .sidebar .nav-link:hover {
+        background-color: #e9ecef;
+        border-left-color: #667eea;
+        color: #667eea;
+    }
+    .sidebar .nav-link.active {
+        background-color: #fff;
+        border-left-color: #667eea;
+        color: #667eea;
+        font-weight: 600;
+    }
+    .sidebar .nav-link i {
+        width: 20px;
+        margin-right: 10px;
+        text-align: center;
+    }
+    .profile-icon {
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    .profile-icon i {
+        color: white;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+</style>
+{% endblock %}

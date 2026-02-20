@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}System Activity History - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_all_students_history' %}">
+                    <i class="fas fa-user-graduate"></i> Students History
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_all_teachers_history' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Teachers History
+                </a>
+                <a class="nav-link active" href="{% url 'admin_view_login_history' %}">
+                    <i class="fas fa-sign-in-alt"></i> System Activity
+                </a>
+                <a class="nav-link" href="{% url 'admin_view_admin_history' %}">
+                    <i class="fas fa-history"></i> My History
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-chart-line"></i> System Activity History</h2>
+                <div>
+                    <span class="badge bg-primary">Total: {{ total_actions }}</span>
+                    <span class="badge bg-success">Filtered: {{ filtered_count }}</span>
+                </div>
+            </div>
+
+            <!-- Statistics Dashboard -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center border-primary">
+                        <div class="card-body">
+                            <h3 class="text-primary">{{ total_actions }}</h3>
+                            <p class="mb-0"><i class="fas fa-database"></i> Total Actions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center border-success">
+                        <div class="card-body">
+                            <h3 class="text-success">{{ today_actions }}</h3>
+                            <p class="mb-0"><i class="fas fa-calendar-day"></i> Today</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center border-info">
+                        <div class="card-body">
+                            <h3 class="text-info">{{ week_actions }}</h3>
+                            <p class="mb-0"><i class="fas fa-calendar-week"></i> This Week</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center border-warning">
+                        <div class="card-body">
+                            <h3 class="text-warning">{{ month_actions }}</h3>
+                            <p class="mb-0"><i class="fas fa-calendar-alt"></i> This Month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Breakdown -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h6 class="mb-0"><i class="fas fa-plus-circle"></i> Additions</h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <h2 class="text-success">{{ additions }}</h2>
+                            <small class="text-muted">New records created</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-warning text-white">
+                            <h6 class="mb-0"><i class="fas fa-edit"></i> Changes</h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <h2 class="text-warning">{{ changes }}</h2>
+                            <small class="text-muted">Records modified</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h6 class="mb-0"><i class="fas fa-trash"></i> Deletions</h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <h2 class="text-danger">{{ deletions }}</h2>
+                            <small class="text-muted">Records deleted</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Active Users -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0"><i class="fas fa-users"></i> Most Active Users</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in most_active_users %}
+                                    <tr>
+                                        <td><i class="fas fa-user"></i> {{ user.user__username }}</td>
+                                        <td class="text-end"><span class="badge bg-primary">{{ user.action_count }}</span></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted">No data</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            <h6 class="mb-0"><i class="fas fa-database"></i> Most Modified Content</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Content Type</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for content in top_content_types %}
+                                    <tr>
+                                        <td><i class="fas fa-cube"></i> {{ content.content_type__model|title }}</td>
+                                        <td class="text-end"><span class="badge bg-secondary">{{ content.action_count }}</span></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted">No data</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Filter Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-filter"></i> Advanced Filters</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="user" class="form-label"><i class="fas fa-user"></i> Username</label>
+                            <input type="text" class="form-control" id="user" name="user" 
+                                   value="{{ user_filter }}" placeholder="Search username">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="role" class="form-label"><i class="fas fa-user-tag"></i> Role</label>
+                            <select class="form-control" id="role" name="role">
+                                <option value="">All Roles</option>
+                                <option value="admin" {% if role_filter == "admin" %}selected{% endif %}>Admin</option>
+                                <option value="teacher" {% if role_filter == "teacher" %}selected{% endif %}>Teacher</option>
+                                <option value="student" {% if role_filter == "student" %}selected{% endif %}>Student</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="action" class="form-label"><i class="fas fa-bolt"></i> Action</label>
+                            <select class="form-control" id="action" name="action">
+                                <option value="">All Actions</option>
+                                <option value="1" {% if action_filter == "1" %}selected{% endif %}>Added</option>
+                                <option value="2" {% if action_filter == "2" %}selected{% endif %}>Changed</option>
+                                <option value="3" {% if action_filter == "3" %}selected{% endif %}>Deleted</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="content_type" class="form-label"><i class="fas fa-cube"></i> Content Type</label>
+                            <select class="form-control" id="content_type" name="content_type">
+                                <option value="">All Types</option>
+                                {% for ct in content_types %}
+                                <option value="{{ ct.model }}" {% if content_type_filter == ct.model %}selected{% endif %}>
+                                    {{ ct.model|title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date" class="form-label"><i class="fas fa-calendar"></i> Date</label>
+                            <input type="date" class="form-control" id="date" name="date" value="{{ date_filter }}">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <a href="{% url 'admin_view_login_history' %}" class="btn btn-secondary">
+                                    <i class="fas fa-redo"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Activity Log Table -->
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Activity Log 
+                        <small>(Showing {{ history.count }} of {{ filtered_count }} filtered records)</small>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th width="12%"><i class="fas fa-clock"></i> Date & Time</th>
+                                    <th width="15%"><i class="fas fa-user"></i> User</th>
+                                    <th width="8%"><i class="fas fa-user-tag"></i> Role</th>
+                                    <th width="10%"><i class="fas fa-bolt"></i> Action</th>
+                                    <th width="12%"><i class="fas fa-cube"></i> Content Type</th>
+                                    <th width="15%"><i class="fas fa-tag"></i> Object</th>
+                                    <th width="28%"><i class="fas fa-info-circle"></i> Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in history %}
+                                <tr>
+                                    <td>
+                                        <small>
+                                            {{ entry.action_time|date:"d M Y" }}<br>
+                                            <strong>{{ entry.action_time|date:"h:i:s A" }}</strong>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <strong>{{ entry.user.username }}</strong><br>
+                                        <small class="text-muted">{{ entry.user.get_full_name|default:"-" }}</small>
+                                    </td>
+                                    <td>
+                                        {% if entry.user.id in user_profiles %}
+                                            {% with role=user_profiles|get:entry.user.id %}
+                                                {% if role == 'admin' %}
+                                                <span class="badge bg-danger"><i class="fas fa-user-shield"></i> Admin</span>
+                                                {% elif role == 'teacher' %}
+                                                <span class="badge bg-success"><i class="fas fa-chalkboard-teacher"></i> Teacher</span>
+                                                {% elif role == 'student' %}
+                                                <span class="badge bg-info"><i class="fas fa-user-graduate"></i> Student</span>
+                                                {% else %}
+                                                <span class="badge bg-secondary">Unknown</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% else %}
+                                        <span class="badge bg-warning"><i class="fas fa-cog"></i> System</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if entry.action_flag == 1 %}
+                                        <span class="badge bg-success"><i class="fas fa-plus"></i> Added</span>
+                                        {% elif entry.action_flag == 2 %}
+                                        <span class="badge bg-warning"><i class="fas fa-edit"></i> Changed</span>
+                                        {% elif entry.action_flag == 3 %}
+                                        <span class="badge bg-danger"><i class="fas fa-trash"></i> Deleted</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Unknown</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ entry.content_type.model|title }}</span>
+                                    </td>
+                                    <td>
+                                        <small>{{ entry.object_repr|truncatewords:5|default:"-" }}</small>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ entry.change_message|default:"No details available"|truncatewords:10 }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning m-3">
+                        <i class="fas fa-exclamation-triangle"></i> No activity records found matching your filters.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Legend & Info -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-info-circle"></i> Action Types</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="badge bg-success w-100"><i class="fas fa-plus"></i> Added</span>
+                                    <small class="d-block text-center mt-1">New record</small>
+                                </div>
+                                <div class="col-4">
+                                    <span class="badge bg-warning w-100"><i class="fas fa-edit"></i> Changed</span>
+                                    <small class="d-block text-center mt-1">Modified</small>
+                                </div>
+                                <div class="col-4">
+                                    <span class="badge bg-danger w-100"><i class="fas fa-trash"></i> Deleted</span>
+                                    <small class="d-block text-center mt-1">Removed</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="fas fa-user-tag"></i> User Roles</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="badge bg-danger w-100"><i class="fas fa-user-shield"></i> Admin</span>
+                                    <small class="d-block text-center mt-1">Administrator</small>
+                                </div>
+                                <div class="col-4">
+                                    <span class="badge bg-success w-100"><i class="fas fa-chalkboard-teacher"></i> Teacher</span>
+                                    <small class="d-block text-center mt-1">Faculty</small>
+                                </div>
+                                <div class="col-4">
+                                    <span class="badge bg-info w-100"><i class="fas fa-user-graduate"></i> Student</span>
+                                    <small class="d-block text-center mt-1">Learner</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export & Help -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6><i class="fas fa-lightbulb"></i> Tips:</h6>
+                            <ul class="mb-0">
+                                <li>Use filters to narrow down specific activities</li>
+                                <li>Combine multiple filters for precise results</li>
+                                <li>Check "Most Active Users" to identify heavy system usage</li>
+                                <li>Monitor "Most Modified Content" to track data changes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <p class="text-muted mb-2"><i class="fas fa-shield-alt"></i> All actions are logged for security</p>
+                            <p class="text-muted mb-0"><i class="fas fa-clock"></i> Last updated: {{ now|date:"d M Y, h:i A" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

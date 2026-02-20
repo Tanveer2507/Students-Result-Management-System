@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Enter Marks{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'teacher_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link active" href="{% url 'teacher_enter_marks' %}">
+                    <i class="fas fa-edit"></i> Enter Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_marks' %}">
+                    <i class="fas fa-list"></i> View Marks
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4"><i class="fas fa-edit"></i> Enter Marks</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">Enter/Update Student Marks</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Select Student</label>
+                                    <select class="form-select" name="student_id" required>
+                                        <option value="">-- Select Student --</option>
+                                        {% for student in students %}
+                                        <option value="{{ student.id }}">
+                                            {{ student.roll_number }} - {{ student.user.get_full_name }} ({{ student.student_class }})
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Select Subject</label>
+                                    <select class="form-select" name="subject_id" required>
+                                        <option value="">-- Select Subject --</option>
+                                        {% for subject in subjects %}
+                                        <option value="{{ subject.id }}">
+                                            {{ subject.name }} ({{ subject.class_assigned }}) - Max: {{ subject.max_marks }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Marks Obtained</label>
+                                    <input type="number" class="form-control" name="marks_obtained" min="0" required>
+                                    <small class="text-muted">Enter marks obtained by the student</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Exam Date</label>
+                                    <input type="date" class="form-control" name="exam_date" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i> Save Marks
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Instructions</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success"></i> Select the student from the dropdown</li>
+                                <li class="mb-2"><i class="fas fa-check text-success"></i> Choose the subject you teach</li>
+                                <li class="mb-2"><i class="fas fa-check text-success"></i> Enter marks obtained (must be within max marks)</li>
+                                <li class="mb-2"><i class="fas fa-check text-success"></i> Select the exam date</li>
+                                <li class="mb-2"><i class="fas fa-check text-success"></i> Click Save to submit</li>
+                            </ul>
+                            <hr>
+                            <h6 class="text-muted">Your Subjects:</h6>
+                            <ul>
+                                {% for subject in subjects %}
+                                <li>{{ subject.name }} ({{ subject.class_assigned }}) - Max: {{ subject.max_marks }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

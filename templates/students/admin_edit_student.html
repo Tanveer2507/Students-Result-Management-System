@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-edit"></i> Edit Student</h2>
+                <a href="{% url 'admin_student_detail' student.id %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Update Student Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <h6 class="mb-3"><i class="fas fa-user"></i> Personal Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="first_name" value="{{ student.user.first_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="last_name" value="{{ student.user.last_name }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Roll Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="roll_number" value="{{ student.roll_number }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Class <span class="text-danger">*</span></label>
+                                <select class="form-control" name="class_id" required>
+                                    {% for class in classes %}
+                                    <option value="{{ class.id }}" {% if student.student_class.id == class.id %}selected{% endif %}>
+                                        {{ class }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h6 class="mb-3"><i class="fas fa-envelope"></i> Contact Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" value="{{ student.user.email }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" name="phone" value="{{ student.phone }}" required>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h6 class="mb-3"><i class="fas fa-users"></i> Family Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Father's Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="father_name" value="{{ student.father_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mother's Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="mother_name" value="{{ student.mother_name }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Address <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="address" rows="3" required>{{ student.address }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a href="{% url 'admin_student_detail' student.id %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

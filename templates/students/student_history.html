@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My History - SRMS{% endblock %}
+
+{% block extra_css %}
+<style>
+    .history-card {
+        border-left: 4px solid #4e73df;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+    }
+    
+    .history-card:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+    }
+    
+    .action-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .action-added {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .action-changed {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .action-deleted {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+    
+    .icon-added {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .icon-changed {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .icon-deleted {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <div class="p-3">
+                <h5 class="mb-4"><i class="fas fa-user-graduate"></i> Student Panel</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_profile' %}">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_marks_detail' %}">
+                            <i class="fas fa-chart-bar"></i> My Marks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_result_detail' %}">
+                            <i class="fas fa-file-alt"></i> My Result
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_id_card' %}">
+                            <i class="fas fa-id-card"></i> ID Card
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'student_history' %}">
+                            <i class="fas fa-history"></i> My History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'change_password' %}">
+                            <i class="fas fa-key"></i> Change Password
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2><i class="fas fa-history"></i> My History</h2>
+                    <p class="text-muted">View all changes and updates to your profile and records</p>
+                </div>
+                <a href="?export=csv" class="btn btn-success">
+                    <i class="fas fa-download"></i> Export to CSV
+                </a>
+            </div>
+
+            <!-- Student Info Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong><i class="fas fa-user"></i> Name:</strong>
+                            <p>{{ student.user.get_full_name }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <strong><i class="fas fa-id-badge"></i> Roll Number:</strong>
+                            <p>{{ student.roll_number }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <strong><i class="fas fa-school"></i> Class:</strong>
+                            <p>{{ student.student_class }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <strong><i class="fas fa-clock"></i> Total Records:</strong>
+                            <p>{{ history|length }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Timeline -->
+            {% if history %}
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-list"></i> Activity Timeline</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for entry in history %}
+                        <div class="history-card card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <div class="timeline-icon {% if entry.action_flag == 1 %}icon-added{% elif entry.action_flag == 2 %}icon-changed{% else %}icon-deleted{% endif %}">
+                                            {% if entry.action_flag == 1 %}
+                                                <i class="fas fa-plus"></i>
+                                            {% elif entry.action_flag == 2 %}
+                                                <i class="fas fa-edit"></i>
+                                            {% else %}
+                                                <i class="fas fa-trash"></i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <span class="action-badge {% if entry.action_flag == 1 %}action-added{% elif entry.action_flag == 2 %}action-changed{% else %}action-deleted{% endif %}">
+                                                    {% if entry.action_flag == 1 %}
+                                                        ADDED
+                                                    {% elif entry.action_flag == 2 %}
+                                                        CHANGED
+                                                    {% else %}
+                                                        DELETED
+                                                    {% endif %}
+                                                </span>
+                                                <strong class="ms-2">{{ entry.content_type.model|title }}</strong>
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar"></i> {{ entry.action_time|date:"M d, Y" }}
+                                                <i class="fas fa-clock ms-2"></i> {{ entry.action_time|time:"h:i A" }}
+                                            </small>
+                                        </div>
+                                        <p class="mb-1 mt-2">
+                                            <i class="fas fa-user-shield"></i> <strong>Changed by:</strong> 
+                                            {{ entry.user.get_full_name|default:entry.user.username }}
+                                        </p>
+                                        {% if entry.change_message %}
+                                        <p class="mb-0 text-muted">
+                                            <i class="fas fa-info-circle"></i> {{ entry.change_message }}
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No history records found yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Enter Marks{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white"><h4 class="mb-0">Enter/Update Marks</h4></div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Student</label>
+                            <select class="form-select" name="student_id" required>
+                                <option value="">Select Student</option>
+                                {% for student in students %}
+                                <option value="{{ student.id }}">{{ student.roll_number }} - {{ student.user.get_full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <select class="form-select" name="subject_id" required>
+                                <option value="">Select Subject</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.name }} (Max: {{ subject.max_marks }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Marks Obtained</label>
+                            <input type="number" class="form-control" name="marks_obtained" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Exam Date</label>
+                            <input type="date" class="form-control" name="exam_date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Marks</button>
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

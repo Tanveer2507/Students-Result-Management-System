@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Test Actions{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Test Result Actions</h2>
+    
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5>Action Buttons Test</h5>
+        </div>
+        <div class="card-body">
+            <p>Click each button to test if actions are working:</p>
+            
+            {% if results %}
+                {% for result in results %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6>Result for: {{ result.student.user.get_full_name }} (Roll: {{ result.student.roll_number }})</h6>
+                        <p>Total: {{ result.total_marks }} | Percentage: {{ result.percentage }}% | Grade: {{ result.grade }} | Status: {{ result.status }}</p>
+                        
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'admin_result_detail' result.id %}" class="btn btn-info">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            <a href="{% url 'admin_edit_result' result.id %}" class="btn btn-warning">
+                                <i class="fas fa-calculator"></i> Recalculate
+                            </a>
+                            <a href="{% url 'admin_delete_result' result.id %}" class="btn btn-danger" onclick="return confirm('Delete this result?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                View URL: /students/admin/result/{{ result.id }}/<br>
+                                Edit URL: /students/admin/result/{{ result.id }}/edit/<br>
+                                Delete URL: /students/admin/result/{{ result.id }}/delete/
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-danger">No results found!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

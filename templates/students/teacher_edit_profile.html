@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block title %}Edit Teacher Profile{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'teacher_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link" href="{% url 'teacher_enter_marks' %}">
+                    <i class="fas fa-edit"></i> Enter Marks
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_marks' %}">
+                    <i class="fas fa-list"></i> View Marks
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4">Edit Profile</h2>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-edit"></i> Update Your Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                <h6 class="mb-3"><i class="fas fa-user"></i> Personal Information</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" name="first_name" value="{{ teacher.user.first_name }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" name="last_name" value="{{ teacher.user.last_name }}" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" value="{{ teacher.user.email }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" name="phone" value="{{ teacher.phone }}" required>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <h6 class="mb-3"><i class="fas fa-graduation-cap"></i> Professional Information</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Qualification</label>
+                                        <input type="text" class="form-control" name="qualification" value="{{ teacher.qualification }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Specialization</label>
+                                        <input type="text" class="form-control" name="specialization" value="{{ teacher.specialization|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Experience (Years)</label>
+                                        <input type="number" class="form-control" name="experience" value="{{ teacher.experience }}" min="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control" name="address" rows="2">{{ teacher.address|default:'' }}</textarea>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <h6 class="mb-3"><i class="fas fa-camera"></i> Profile Picture</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Upload New Picture</label>
+                                    <input type="file" class="form-control" name="profile_picture" accept="image/*">
+                                    <small class="text-muted">Accepted formats: JPG, PNG, GIF (Max 5MB)</small>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                    <a href="{% url 'teacher_profile' %}" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <!-- Current Profile Picture -->
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-image"></i> Current Picture</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            {% if teacher.profile_picture %}
+                            <img src="{{ teacher.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #1cc88a;">
+                            <form method="post" class="mt-3">
+                                {% csrf_token %}
+                                <input type="hidden" name="remove_picture" value="1">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to remove your profile picture?')">
+                                    <i class="fas fa-trash"></i> Remove Picture
+                                </button>
+                            </form>
+                            {% else %}
+                            <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 80px;">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <p class="text-muted mt-3">No profile picture uploaded</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Info Card -->
+                    <div class="card mt-3">
+                        <div class="card-header bg-warning text-white">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Note</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small mb-0">
+                                <i class="fas fa-check-circle text-success"></i> Your Employee ID cannot be changed<br>
+                                <i class="fas fa-check-circle text-success"></i> Profile picture is optional<br>
+                                <i class="fas fa-check-circle text-success"></i> All fields marked with * are required
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

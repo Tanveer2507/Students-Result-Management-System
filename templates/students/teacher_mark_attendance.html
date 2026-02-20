@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Mark Attendance - Teacher{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link active" href="{% url 'teacher_mark_attendance' %}">
+                    <i class="fas fa-calendar-check"></i> Mark Attendance
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_attendance' %}">
+                    <i class="fas fa-list"></i> View Attendance
+                </a>
+                <a class="nav-link" href="{% url 'teacher_view_assignments' %}">
+                    <i class="fas fa-tasks"></i> Assignments
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2><i class="fas fa-calendar-check"></i> Mark Attendance</h2>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <form method="post" id="attendanceForm">
+                        {% csrf_token %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="class_id" class="form-label">Class</label>
+                                <select class="form-control" id="class_id" name="class_id" required>
+                                    <option value="">Select Class</option>
+                                    {% for class in classes %}
+                                    <option value="{{ class.id }}">{{ class.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" onclick="loadStudents()">
+                            <i class="fas fa-search"></i> Load Students
+                        </button>
+                        
+                        <div id="studentsList" class="mt-4" style="display:none;">
+                            <h5>Mark Attendance for Students</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Roll No</th>
+                                            <th>Student Name</th>
+                                            <th>Status</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="studentsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Save Attendance
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadStudents() {
+    const classId = document.getElementById('class_id').value;
+    const date = document.getElementById('date').value;
+    
+    if (!classId || !date) {
+        alert('Please select both date and class');
+        return;
+    }
+    
+    // Show students list section
+    document.getElementById('studentsList').style.display = 'block';
+    
+    // In a real implementation, you would fetch students via AJAX
+    // For now, this is a placeholder
+}
+</script>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Class Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link active" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-school"></i> {{ class_obj }}</h2>
+                <div>
+                    <a href="{% url 'admin_edit_class' class_obj.id %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit Class
+                    </a>
+                    <a href="{% url 'admin_manage_classes' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card stat-card" style="border-left-color: #4e73df;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Students</h6>
+                                    <h3>{{ students.count }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-user-graduate fa-2x text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card stat-card" style="border-left-color: #1cc88a;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Total Subjects</h6>
+                                    <h3>{{ subjects.count }}</h3>
+                                </div>
+                                <div>
+                                    <i class="fas fa-book fa-2x text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card stat-card" style="border-left-color: #f6c23e;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="text-muted">Class Info</h6>
+                                    <h5>{{ class_obj.name }}</h5>
+                                    <p class="mb-0">Section: {{ class_obj.section }}</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-school fa-2x text-warning"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students in Class -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Students in this Class</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if students %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Roll No</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for student in students %}
+                                        <tr>
+                                            <td><strong>{{ student.roll_number }}</strong></td>
+                                            <td>
+                                                {% if student.profile_picture %}
+                                                <img src="{{ student.profile_picture.url }}" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                                                {% endif %}
+                                                {{ student.user.get_full_name }}
+                                            </td>
+                                            <td>{{ student.user.email }}</td>
+                                            <td>{{ student.phone }}</td>
+                                            <td>
+                                                <a href="{% url 'admin_student_detail' student.id %}" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No students in this class yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects for Class -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-book"></i> Subjects for this Class</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if subjects %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Subject Name</th>
+                                            <th>Code</th>
+                                            <th>Max Marks</th>
+                                            <th>Pass Marks</th>
+                                            <th>Teachers</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for subject in subjects %}
+                                        <tr>
+                                            <td><strong>{{ subject.name }}</strong></td>
+                                            <td>{{ subject.code }}</td>
+                                            <td>{{ subject.max_marks }}</td>
+                                            <td>{{ subject.pass_marks }}</td>
+                                            <td>{{ subject.teachers.count }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="text-muted text-center mb-0">No subjects assigned to this class yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

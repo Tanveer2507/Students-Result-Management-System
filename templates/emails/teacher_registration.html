@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            background: #f8f9fc;
+            padding: 30px;
+            border: 1px solid #e3e6f0;
+        }
+        .credentials-box {
+            background: white;
+            border-left: 4px solid #1cc88a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .credential-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fc;
+            border-radius: 5px;
+        }
+        .credential-label {
+            font-weight: bold;
+            color: #1cc88a;
+        }
+        .credential-value {
+            font-size: 16px;
+            color: #333;
+            font-family: monospace;
+        }
+        .footer {
+            background: #e3e6f0;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-radius: 0 0 10px 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #1cc88a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="icon">👨‍🏫</div>
+        <h1>Welcome to SRMS!</h1>
+        <p>Student Result Management System</p>
+    </div>
+    
+    <div class="content">
+        <h2>Hello {{ teacher_name }},</h2>
+        
+        <p>Congratulations! Your teacher account has been successfully created in our Student Result Management System.</p>
+        
+        <div class="credentials-box">
+            <h3 style="margin-top: 0; color: #1cc88a;">📋 Your Account Details</h3>
+            
+            <div class="credential-item">
+                <span class="credential-label">Employee ID:</span><br>
+                <span class="credential-value">{{ employee_id }}</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">Username:</span><br>
+                <span class="credential-value">{{ username }}</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">Email:</span><br>
+                <span class="credential-value">{{ email }}</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">Qualification:</span><br>
+                <span class="credential-value">{{ qualification }}</span>
+            </div>
+            
+            {% if subjects %}
+            <div class="credential-item">
+                <span class="credential-label">Assigned Subjects:</span><br>
+                <span class="credential-value">{{ subjects }}</span>
+            </div>
+            {% endif %}
+            
+            <div class="credential-item">
+                <span class="credential-label">Temporary Password:</span><br>
+                <span class="credential-value">{{ password }}</span>
+            </div>
+        </div>
+        
+        <p><strong>⚠️ Important:</strong> Please change your password after your first login for security purposes.</p>
+        
+        <h3>What You Can Do:</h3>
+        <ul>
+            <li>✅ View and manage your profile</li>
+            <li>✅ View students in your assigned classes</li>
+            <li>✅ Enter and update student marks</li>
+            <li>✅ View marks history for your subjects</li>
+            <li>✅ Track student performance</li>
+        </ul>
+        
+        <center>
+            <a href="http://127.0.0.1:8000/login/" class="button">Login to Your Account</a>
+        </center>
+        
+        <p>If you have any questions or need assistance, please contact the system administrator.</p>
+        
+        <p>Best regards,<br>
+        <strong>SRMS Administration Team</strong></p>
+    </div>
+    
+    <div class="footer">
+        <p>This is an automated email. Please do not reply to this message.</p>
+        <p>&copy; 2026 Student Result Management System. All rights reserved.</p>
+    </div>
+</body>
+</html>

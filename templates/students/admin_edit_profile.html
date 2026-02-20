@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Admin Profile - SRMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">ADMIN PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link active" href="{% url 'admin_profile' %}">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_students' %}">
+                    <i class="fas fa-user-graduate"></i> Manage Students
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_teachers' %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_classes' %}">
+                    <i class="fas fa-school"></i> Manage Classes
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_subjects' %}">
+                    <i class="fas fa-book"></i> Manage Subjects
+                </a>
+                <a class="nav-link" href="{% url 'admin_manage_results' %}">
+                    <i class="fas fa-certificate"></i> Manage Results
+                </a>
+                <a class="nav-link" href="/admin/">
+                    <i class="fas fa-cog"></i> Django Admin
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-edit" style="color: #667eea;"></i> Edit Admin Profile</h2>
+                <a href="{% url 'admin_profile' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Profile
+                </a>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-user-edit"></i> Update Profile Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i> Update your personal information below. All fields are optional.
+                                </div>
+
+                                <h6 style="color: #667eea;" class="mb-3"><i class="fas fa-user"></i> Basic Information</h6>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" name="first_name" 
+                                               value="{{ user.first_name }}" placeholder="Enter first name">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" name="last_name" 
+                                               value="{{ user.last_name }}" placeholder="Enter last name">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" name="email" 
+                                           value="{{ user.email }}" placeholder="Enter email address">
+                                    <small class="text-muted">This email will be used for notifications and password recovery</small>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <h6 style="color: #667eea;" class="mb-3"><i class="fas fa-address-card"></i> Contact Information</h6>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" name="phone" 
+                                           value="{{ profile.phone }}" placeholder="Enter phone number">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" name="address" rows="3" 
+                                              placeholder="Enter your address">{{ profile.address }}</textarea>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'admin_profile' %}" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info Card -->
+                    <div class="card shadow-sm mt-3">
+                        <div class="card-body">
+                            <h6 style="color: #667eea;" class="mb-3"><i class="fas fa-shield-alt"></i> Account Security</h6>
+                            <p class="text-muted mb-3">
+                                Want to change your password? Use the button below to update your account password.
+                            </p>
+                            <a href="{% url 'admin_change_password' %}" class="btn btn-outline-warning">
+                                <i class="fas fa-key"></i> Change Password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .sidebar {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        border-right: 1px solid #dee2e6;
+    }
+    .sidebar .nav-link {
+        color: #495057;
+        padding: 12px 20px;
+        border-left: 3px solid transparent;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+    }
+    .sidebar .nav-link:hover {
+        background-color: #e9ecef;
+        border-left-color: #667eea;
+        color: #667eea;
+    }
+    .sidebar .nav-link.active {
+        background-color: #fff;
+        border-left-color: #667eea;
+        color: #667eea;
+        font-weight: 600;
+    }
+    .sidebar .nav-link i {
+        width: 20px;
+        margin-right: 10px;
+        text-align: center;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+</style>
+{% endblock %}

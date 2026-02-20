@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - SRMS{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 80px 0;">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="fw-bold" style="color: #667eea;">Contact Us</h1>
+            <p class="lead text-muted">We'd love to hear from you. Get in touch with us!</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <!-- Contact Form -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="fw-bold mb-4" style="color: #667eea;">
+                        <i class="fas fa-paper-plane me-2"></i>Send us a Message
+                    </h4>
+                    <form method="POST" action="{% url 'contact' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Your Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Your Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Subject</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                <input type="text" name="subject" class="form-control" placeholder="Enter subject" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Message</label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Enter your message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Information -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="fw-bold mb-4" style="color: #667eea;">
+                        <i class="fas fa-info-circle me-2"></i>Contact Information
+                    </h4>
+                
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Email</h6>
+                            <p class="mb-0 text-muted">admin@srms.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Phone</h6>
+                            <p class="mb-0 text-muted">+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Location</h6>
+                            <p class="mb-0 text-muted">123 Education Street, Academic City</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3">Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="btn btn-outline-primary rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; padding: 0;">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

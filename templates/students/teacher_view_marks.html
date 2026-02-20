@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}View Marks{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{% url 'teacher_profile' %}">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a class="nav-link" href="{% url 'teacher_students_list' %}">
+                    <i class="fas fa-users"></i> My Students
+                </a>
+                <a class="nav-link" href="{% url 'teacher_enter_marks' %}">
+                    <i class="fas fa-edit"></i> Enter Marks
+                </a>
+                <a class="nav-link active" href="{% url 'teacher_view_marks' %}">
+                    <i class="fas fa-list"></i> View Marks
+                </a>
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="fas fa-key"></i> Change Password
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4"><i class="fas fa-list"></i> View Marks</h2>
+            
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Marks Entered by You</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Student</th>
+                                    <th>Roll Number</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Marks Obtained</th>
+                                    <th>Max Marks</th>
+                                    <th>Percentage</th>
+                                    <th>Exam Date</th>
+                                    <th>Entered On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mark in marks %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ mark.student.user.get_full_name }}</td>
+                                    <td><strong>{{ mark.student.roll_number }}</strong></td>
+                                    <td><span class="badge bg-primary">{{ mark.student.student_class }}</span></td>
+                                    <td>{{ mark.subject.name }}</td>
+                                    <td><strong>{{ mark.marks_obtained }}</strong></td>
+                                    <td>{{ mark.subject.max_marks }}</td>
+                                    <td>
+                                        {% widthratio mark.marks_obtained mark.subject.max_marks 100 as percentage %}
+                                        <span class="badge {% if percentage >= 75 %}bg-success{% elif percentage >= 60 %}bg-info{% elif percentage >= 50 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ percentage }}%
+                                        </span>
+                                    </td>
+                                    <td>{{ mark.exam_date|date:"d M Y" }}</td>
+                                    <td>{{ mark.created_at|date:"d M Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="10" class="text-center">No marks entered yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card border-primary">
+                        <div class="card-body text-center">
+                            <h3 class="text-primary">{{ marks.count }}</h3>
+                            <p class="mb-0">Total Marks Entries</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success">
+                        <div class="card-body text-center">
+                            <h3 class="text-success">{{ subjects.count }}</h3>
+                            <p class="mb-0">Subjects Teaching</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-info">
+                        <div class="card-body text-center">
+                            <h3 class="text-info">
+                                <a href="{% url 'teacher_enter_marks' %}" class="text-decoration-none">
+                                    <i class="fas fa-plus-circle"></i>
+                                </a>
+                            </h3>
+                            <p class="mb-0">
+                                <a href="{% url 'teacher_enter_marks' %}" class="text-decoration-none">
+                                    Enter New Marks
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}My Assignments - Teacher{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar p-0">
+            <div class="p-3">
+                <h6 class="text-muted">TEACHER PORTAL</h6>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{% url 'teacher_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a class="nav-link active" href="{% url 'teacher_view_assignments' %}"><i class="fas fa-tasks"></i> My Assignments</a>
+                <a class="nav-link" href="{% url 'teacher_create_assignment' %}"><i class="fas fa-plus"></i> Create Assignment</a>
+            </nav>
+        </div>
+
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-tasks"></i> My Assignments</h2>
+                <a href="{% url 'teacher_create_assignment' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Assignment
+                </a>
+            </div>
+            
+            <div class="row">
+                {% for assignment in assignments %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">{{ assignment.title }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+                            <p><strong>Class:</strong> {{ assignment.class_assigned.name }}</p>
+                            <p><strong>Max Marks:</strong> {{ assignment.max_marks }}</p>
+                            <p><strong>Due Date:</strong> {{ assignment.due_date|date:"d M Y, h:i A" }}</p>
+                            <p><strong>Status:</strong> 
+                                {% if assignment.status == 'published' %}
+                                <span class="badge bg-success">Published</span>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ assignment.get_status_display }}</span>
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'teacher_assignment_detail' assignment.id %}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No assignments created yet. 
+                        <a href="{% url 'teacher_create_assignment' %}">Create your first assignment</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

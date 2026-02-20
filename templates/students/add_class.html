@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Add Class{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white"><h4 class="mb-0">Add New Class</h4></div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Class Name</label>
+                            <input type="text" class="form-control" name="name" placeholder="e.g., 10th, 12th" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Section</label>
+                            <input type="text" class="form-control" name="section" placeholder="e.g., A, B" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                        <a href="{% url 'class_list' %}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
