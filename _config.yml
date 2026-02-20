@@ -1,0 +1,39 @@
+# Jekyll configuration for GitHub Pages
+theme: jekyll-theme-minimal
+
+# Exclude Django-specific files from Jekyll processing
+exclude:
+  - manage.py
+  - requirements.txt
+  - db.sqlite3
+  - "*.py"
+  - "*.pyc"
+  - __pycache__/
+  - venv/
+  - env/
+  - accounts/
+  - students/
+  - results/
+  - srms_project/
+  - utility_scripts/
+  - templates/
+  - static/
+  - media/
+  - start.bat
+  - .gitignore
+
+# Only process markdown files for documentation
+include:
+  - README.md
+  - DEPLOYMENT_GUIDE.md
+  - QUICK_START_GUIDE.md
+  - PROJECT_COMPLETION_SUMMARY.md
+  - ADMIN_HISTORY_FEATURE.md
+  - ADMIN_LOGIN_HISTORY_IMPROVED.md
+  - LOGIN_CARDS_UPDATE.md
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
