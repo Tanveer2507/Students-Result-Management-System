@@ -206,7 +206,7 @@ pip install reportlab
 ```
 
 ### Issue: "CSRF verification failed"
-**Solution**: Make sure `{% csrf_token %}` is in all forms
+**Solution**: Make sure `{%raw%}{% csrf_token %}{%endraw%}` is in all forms
 
 ### Issue: "Media files not loading"
 **Solution**: Check `MEDIA_URL` and `MEDIA_ROOT` in settings.py
