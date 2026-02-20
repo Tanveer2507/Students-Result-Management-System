@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Management System - Django Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .alert h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .alert p {
+            color: #856404;
+            line-height: 1.6;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .info-box h3 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+        
+        .info-box p {
+            color: #1976D2;
+            line-height: 1.6;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .feature h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .feature p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .deployment-options {
+            margin: 30px 0;
+        }
+        
+        .deployment-options h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .deploy-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .deploy-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .deploy-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .deploy-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .links {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .links h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .link-item i {
+            margin-right: 10px;
+            color: #667eea;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Student Result Management System</h1>
+            <p>A Complete Django Web Application</p>
+        </div>
+        
+        <div class="content">
+            <div class="alert">
+                <h3>⚠️ Important Notice</h3>
+                <p>This is a <strong>Django application</strong> that requires a Python server to run. GitHub Pages only hosts static websites (HTML/CSS/JS) and cannot run Django applications.</p>
+            </div>
+            
+            <div class="info-box">
+                <h3>📦 What is This Project?</h3>
+                <p>SRMS is a comprehensive web application built with Django for managing student results, attendance, assignments, and academic records. It includes separate portals for Admins, Teachers, and Students.</p>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-user-shield"></i>
+                    <h4>Admin Portal</h4>
+                    <p>Complete management of students, teachers, classes, and results</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4>Teacher Portal</h4>
+                    <p>Attendance, assignments, marks entry, and student tracking</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>Student Portal</h4>
+                    <p>View results, attendance, submit assignments, download marksheets</p>
+                </div>
+            </div>
+            
+            <div class="deployment-options">
+                <h3>🚀 Deploy This Application</h3>
+                
+                <div class="deploy-card">
+                    <h4>1. PythonAnywhere (Recommended - Free)</h4>
+                    <p>Best for beginners. Free tier available with 512MB storage and always-on web app.</p>
+                    <a href="https://www.pythonanywhere.com" class="btn" target="_blank">
+                        <i class="fas fa-rocket"></i> Deploy on PythonAnywhere
+                    </a>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System/blob/main/DEPLOYMENT_GUIDE.md#pythonanywhere-deployment" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-book"></i> View Guide
+                    </a>
+                </div>
+                
+                <div class="deploy-card">
+                    <h4>2. Render (Free with Auto-Deploy)</h4>
+                    <p>Automatic deployments from GitHub. Free tier with 750 hours/month.</p>
+                    <a href="https://render.com" class="btn" target="_blank">
+                        <i class="fas fa-rocket"></i> Deploy on Render
+                    </a>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System/blob/main/DEPLOYMENT_GUIDE.md#render-deployment" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-book"></i> View Guide
+                    </a>
+                </div>
+                
+                <div class="deploy-card">
+                    <h4>3. Railway (Quick & Easy)</h4>
+                    <p>Fast deployment with $5 free credit monthly. Great for testing.</p>
+                    <a href="https://railway.app" class="btn" target="_blank">
+                        <i class="fas fa-rocket"></i> Deploy on Railway
+                    </a>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System/blob/main/DEPLOYMENT_GUIDE.md#railway-deployment" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-book"></i> View Guide
+                    </a>
+                </div>
+            </div>
+            
+            <div class="links">
+                <h3>📚 Documentation & Resources</h3>
+                
+                <div class="link-item">
+                    <i class="fas fa-code-branch"></i>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System" target="_blank">
+                        <strong>GitHub Repository</strong> - View source code
+                    </a>
+                </div>
+                
+                <div class="link-item">
+                    <i class="fas fa-book-open"></i>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System/blob/main/README.md" target="_blank">
+                        <strong>README</strong> - Installation & features guide
+                    </a>
+                </div>
+                
+                <div class="link-item">
+                    <i class="fas fa-rocket"></i>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System/blob/main/DEPLOYMENT_GUIDE.md" target="_blank">
+                        <strong>Deployment Guide</strong> - Step-by-step deployment instructions
+                    </a>
+                </div>
+                
+                <div class="link-item">
+                    <i class="fas fa-play-circle"></i>
+                    <a href="https://github.com/Tanveer2507/Students-Result-Management-System/blob/main/QUICK_START_GUIDE.md" target="_blank">
+                        <strong>Quick Start Guide</strong> - Get started quickly
+                    </a>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #e7f3ff; border-radius: 10px;">
+                <h3 style="color: #1976D2; margin-bottom: 15px;">💡 Quick Setup (Local Development)</h3>
+                <pre style="background: #263238; color: #aed581; padding: 15px; border-radius: 5px; overflow-x: auto;">
+git clone https://github.com/Tanveer2507/Students-Result-Management-System.git
+cd Students-Result-Management-System
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver</pre>
+                <p style="margin-top: 10px; color: #1976D2;">
+                    <strong>Default Admin:</strong> username: <code>administrator</code> | password: <code>administrator@123</code>
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Made with ❤️ by Tanveer Kakar</p>
+            <p style="margin-top: 10px;">
+                <a href="mailto:admin@srms.com" style="color: #667eea; text-decoration: none;">
+                    <i class="fas fa-envelope"></i> admin@srms.com
+                </a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
